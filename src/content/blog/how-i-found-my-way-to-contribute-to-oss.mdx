@@ -1,0 +1,77 @@
+---
+title: How I Found My Way to Contribute to OSS
+subtitle: Finding motivation through building something you're passionate about
+date: 2025-07-17
+tags: [oss, open-source, programming, contributing]
+---
+
+> Disclaimer: I do not consider myself an experienced OSS contributor, but rather someone beginning to understand how OSS actually works.
+
+## A (de)motivational story
+
+Since I started programming I've always wanted to contribute to OSS. I do not really know why in particular, but the idea of contributing to something that is used by other people in a non-commercial way seems like a great idea. I tried approaching it in different ways: the _hacktoberfest_, projects with open issues, implementing random features, etc. None of them worked. I did manage to merge some PRs, but they were not really meaningful for the project nor for me. They were `chore`s. At some point I really thought it was something not meant for me, and that it had a really high barrier to entry.
+
+Nevertheless, a while ago I found a way to actually contribute, and meaningfully! And it's as simple as this: **Don't try to contribute, just build something that you feel passionate about!** This may seem as a contradiction, but I do believe that a it's a great way (at least for me) to _eventually_ contribute to OSS. Let's break it down.
+
+## The algorithm
+
+Picture yourself building something that is really meaningful **for you**. Chances are that whatever you do will make use of others' work, and that work most of the time is open source. If you use Javascript or Python (or your favourite language to [beat the averages](https://paulgraham.com/avg.html)) probably some of the libraries you will be using have a Github page with the code. If you are a curious person (which you should be if you are building something) then you for sure have some of the libraries repos open in one of your `x > 100` tabs in your browser.
+
+When you are at this point, you are motivated and aiming to have something working as soon as possible, when suddenly you encounter an issue... You spend a few hours debugging (thinking your code is shit) when you finally find the issue: library X does not handle that specific edge case... You then proceed to clone the repo locally, spend another few hours setting it up, debugging, testing and fixing the issue. You point your project to the local (or forked) version and boom, it works! Congrats, you just contributed to OSS 😉
+
+The world is smaller than we think (how many times you found someone in a completely random place that blew your mind? [1]) and almost certainly someone will fall into one of these categories:
+
+1. Had the issue before
+2. The maintainers of the project are aware (or have an intuition) of the issue
+3. Someone else will find it soon
+
+And I'm not even talking about features here, but rather real issues in the code that appear the same way they do in the company you work where there's an infinite backlog of bugs. But you just fixed one, hence it's meaningful both for you and for the person that will not encounter it after you make your contribution.
+
+Obviously, take this with a grain of salt. You may not directly or as easily contribute to React or `numpy`, but maybe some of the newer projects that you decide to use yes. Moreover, there's tons of new projects now with all the AI hype. In my case the one I want to talk about is [`browser-use`](https://github.com/browser-use/browser-use).
+
+## My contribution story
+
+I quit my job a few months ago aiming to start my own company: a software company. I won't go into the details of it yet as we are in stealth still, but we are building a solution to help companies in the nightmare of QA.
+
+For that we use [Playwright](https://playwright.dev/python/) and (as it's 2025) AI. And `browser-use` is a great way to have both. It's a Python library that let you interact with a browser using natural language, while maintaining control over the Playwright objects, which are the ones you would use in a good _old_ E2E. As we rely a lot on browser control, and `browser-use` is in extremely active development, [we find bugs](https://github.com/browser-use/browser-use/issues?q=is%3Aissue%20author%3Atarasyarema) from time to time. For some of them we found workaround, but for other we needed to do changes in the library to fix the bug.
+
+For example, at some point there was [a missing `try ... except`](https://github.com/browser-use/browser-use/pull/1772) in a part of the code, and it was failing in the `main` branch. We want to use the latest possible version of the library to make use of the new features asap, we found it immediately after a regular upgrade. I did some investigation in the fork I already had, and found that there was some code that when the agent got into a `n > 1` step would fail due to a function already being registered in the browser session. It was an easy fix, we just needed to add the check for that specific failure, and continue, as it was not really an operational issue. I did the PR, ran the tests locally, linted, talked with the maintainers and in less than 24h it was merged!
+
+This is just an example, but I'm sure you'll find plenty of other examples in your work, and probably most of the PRs in `browser-use` come from people outside the org that are in a similar situation. They are building something meaningful for themselves, found that something was broken or missing, and decided to _just_ fix it.
+
+### Learnings
+
+On the flip-side, contributing is not always as smooth as the example above. Sometimes you end up in an infinite loop of comments, maintainers take long to reply [2], you end up maintaining a fork as the source of truth due to the dependency you have on that one issue being fixed... But it's all part of the process. Life is not always easy, and that's fine. You just need to find ways to keep pushing, and pushing. And it will come.
+
+I would like to dig a bit deeper on the topic of maintaining a fork as the source of truth. In our case, we use python with [`uv`](https://docs.astral.sh/uv/) as the package manager. And as we had [the fork](https://github.com/tarasyarema/browser-use) we used it as the package download location to ensure any fixes that are pending a merge are used by our code. Here's a snippet of how to do it in the `pyproject.toml`:
+
+```toml
+...
+
+dependencies = [
+    "browser-use",
+	...
+]
+
+[tool.uv.sources]
+browser-use = { git = "https://github.com/tarasyarema/browser-use", branch = "taras-main" }
+
+...
+```
+
+This snippet will make sure that when you run `uv sync` the code will be pulled from the fork with the correct branch, commit, etc. [Here are the docs from `uv` around git dependencies](https://docs.astral.sh/uv/concepts/projects/dependencies/#git).
+
+For example, at the time of writing we have a few PRs open that actually fix some edges cases we found. To use those, we created branch (`taras-main`) that have both PR branches merged into it.
+
+## Final notes
+
+I really hope this post sparked a bit of a hype to build something, which in the end is the seed of how all the projects that we use were created in the first place. Who knows, maybe one day I'll be the one reviewing PRs in a projects that other people use... It's good to day-dream from time to time 🌝
+
+## Footnotes
+
+[1] I once found a friend of mine in Thailand during a two week trip, I live in Spain...
+[2] This is not beef to them, as I assume they have plenty of work so thanks for when they do reply fast!
+
+---
+
+> Sadly, because it's 2025, I want to note that this was written entirely by me and no LLMs were involved in the process.

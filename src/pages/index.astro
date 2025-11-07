@@ -1,0 +1,200 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const allPosts = await getCollection("blog");
+const sortedPosts = allPosts.sort((a, b) =>
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+const posts = sortedPosts.map((post) => ({
+  ...post,
+  url: `/blog/${post.slug}`,
+}));
+---
+
+<BaseLayout title="Blog" description="A minimal blog about software, writing, and ideas">
+  <main style="padding: 3rem 1.5rem; max-width: var(--max-width); margin: 0 auto;">
+    <header style="margin-bottom: 3rem;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Blog</h1>
+
+      <!-- Search Box -->
+      <div style="margin-bottom: 2rem;">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search posts..."
+          style="
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            font-family: var(--font-display);
+            border: 1px solid var(--color-text);
+            border-radius: 4px;
+            color: var(--color-text);
+            background-color: var(--color-bg);
+          "
+        />
+        <div id="search-results" style="margin-top: 1rem; display: none;">
+          <p style="color: var(--color-link); font-size: 0.9rem;">
+            <span id="result-count">0</span> results found
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Posts List -->
+    <div id="posts-container">
+      {
+        posts.map((post) => (
+          <article style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #e5e5e5;">
+            <a href={post.url} style="text-decoration: none; color: inherit;">
+              <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
+                {post.data.title}
+              </h2>
+            </a>
+            <p style="font-size: 1.1rem; color: var(--color-link); margin-bottom: 0.75rem;">
+              {post.data.subtitle}
+            </p>
+            <p style="color: var(--color-link); font-size: 0.9rem; margin-bottom: 0.75rem;">
+              {new Date(post.data.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            {post.data.tags.length > 0 && (
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                {post.data.tags.map((tag) => (
+                  <a
+                    href={`/tags/${tag}`}
+                    style="
+                      display: inline-block;
+                      padding: 0.25rem 0.5rem;
+                      border: 1px solid var(--color-text);
+                      border-radius: 2px;
+                      font-size: 0.8rem;
+                      color: var(--color-text);
+                    "
+                  >
+                    #{tag}
+                  </a>
+                ))}
+              </div>
+            )}
+          </article>
+        ))
+      }
+    </div>
+
+    <div id="no-results" style="display: none; text-align: center; padding: 2rem 0;">
+      <p style="color: var(--color-link); font-size: 1.1rem;">No posts found matching your search.</p>
+    </div>
+  </main>
+
+  <script type="module" define:vars={{ posts }}>
+    (async () => {
+      const Fuse = (await import('https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs')).default;
+
+      const searchInput = document.getElementById("search-input");
+      const postsContainer = document.getElementById("posts-container");
+      const noResults = document.getElementById("no-results");
+      const searchResults = document.getElementById("search-results");
+      const resultCount = document.getElementById("result-count");
+
+      // Create searchable index with title, subtitle, tags, and content
+      const searchPosts = posts.map((post) => ({
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+        tags: post.data.tags.join(" "),
+        content: post.body,
+        slug: post.slug,
+        url: post.url,
+        fullPost: post,
+      }));
+
+      const fuse = new Fuse(searchPosts, {
+        keys: [
+          { name: "title", weight: 10 },
+          { name: "subtitle", weight: 5 },
+          { name: "tags", weight: 3 },
+          { name: "content", weight: 1 },
+        ],
+        threshold: 0.2,
+        minMatchCharLength: 2,
+      });
+
+      function renderPosts(postsToRender) {
+        postsContainer.innerHTML = postsToRender
+          .map(
+            (post) => `
+          <article style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #e5e5e5;">
+            <a href="${post.url}" style="text-decoration: none; color: inherit;">
+              <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
+                ${post.title}
+              </h2>
+            </a>
+            <p style="font-size: 1.1rem; color: var(--color-link); margin-bottom: 0.75rem;">
+              ${post.subtitle}
+            </p>
+            <p style="color: var(--color-link); font-size: 0.9rem; margin-bottom: 0.75rem;">
+              ${new Date(post.fullPost.data.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+            ${
+              post.fullPost.data.tags.length > 0
+                ? `<div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    ${post.fullPost.data.tags
+                      .map(
+                        (tag) => `
+                      <a href="/tags/${tag}" style="
+                        display: inline-block;
+                        padding: 0.25rem 0.5rem;
+                        border: 1px solid var(--color-text);
+                        border-radius: 2px;
+                        font-size: 0.8rem;
+                        color: var(--color-text);
+                      ">
+                        #${tag}
+                      </a>
+                    `
+                      )
+                      .join("")}
+                  </div>`
+                : ""
+            }
+          </article>
+        `
+          )
+          .join("");
+      }
+
+      searchInput.addEventListener("input", (e) => {
+        const query = e.target.value.trim();
+
+        if (query === "") {
+          renderPosts(searchPosts);
+          noResults.style.display = "none";
+          searchResults.style.display = "none";
+        } else {
+          const results = fuse.search(query).map((result) => result.item);
+
+          if (results.length === 0) {
+            postsContainer.innerHTML = "";
+            noResults.style.display = "block";
+            searchResults.style.display = "block";
+            resultCount.textContent = "0";
+          } else {
+            renderPosts(results);
+            noResults.style.display = "none";
+            searchResults.style.display = "block";
+            resultCount.textContent = results.length;
+          }
+        }
+      });
+    })();
+  </script>
+</BaseLayout>

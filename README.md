@@ -1,4 +1,4 @@
-# Blog
+# taras
 
 A minimal blog built with [Astro](https://astro.build).
 

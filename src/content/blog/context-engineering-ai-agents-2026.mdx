@@ -1,13 +1,19 @@
 ---
-title: Context Engineering for AI Agents in 2026
-subtitle: Why controlling your LLM context matters more than code quality
+title: A (deep) dive into Context Engineering
+subtitle: Why context engineering is critical, and how to master it.
 date: 2025-11-08
 tags: [ai, agents, context-engineering, llm, langchain]
 ---
 
-# Last week I was procrastinating in LinkedIn, and I stumbled upon a post about AI agents
+Last week I was procrastinating in LinkedIn, and I stumbled upon a post about AI agents
 
-To which I answered that I would write a blog post about this topic. So... here it is!
+[img]
+
+To which I answered that I would write a blog post about this topic. 
+
+[img]
+
+So... here it is!
 
 ## Some background
 
@@ -160,15 +166,23 @@ The models chosen were: `anthropic-claude-sonnet-4.5`, `openai-gpt-4.1-mini`, `g
 
 The most important thing to check first is success rates. I.e., did the agent finish the task or not? For that the "intent" agent scored a 100% rate in all models and all runs. The second best was the raw with only flakiness in GPT-4.1-mini, and the last one with pretty bad results was the summarization one.
 
+[img]
+
 #### Accuracy
 
 The accuracy was not the best in general, probably due to the models used. However you can see that the intent one scored consistently higher across models than the other two, which were pretty close to each other, in fact they followed similar patterns, being the summarization one slightly worse.
+
+[img]
 
 #### Context usage
 
 Before checking the result in terms of context, I want to note how much steps each agent needed to finish the task, which surprised me:
 
+[img]
+
 The intent one is consistent even across models and much less than the other two (fewer than 25 steps).
+
+[img]
 
 Now in terms of context usage, I analyzed the token usage, both for input and output, and the results showed a clear difference in the raw one, being the highest, and the summarization and intent being pretty close.
 
@@ -176,9 +190,13 @@ Now in terms of context usage, I analyzed the token usage, both for input and ou
 
 The intent one was the slower one. I used OpenRouter and generally the latencies might not be super consistent. In general all were able to finish in less than 4 minutes.
 
+[img]
+
 #### Cost
 
 Finally, I will mention the cost, in which obviously the raw one won, and then the summarized one was pretty close to the intent or even cheaper. This is not surprising due to the nature of summarization being a plateau in terms of context limits.
+
+[img]
 
 #### Full report
 
@@ -222,15 +240,25 @@ This, obviously, is more tedious and has a default context bump, as the template
 
 The good thing, as you can see, is that it generally requires less steps due to the deterministic compactification, and is scaled more linearly than the raw approach.
 
+[img]
+
 ## Conclusion
 
-The conclusion is pretty simple: **context engineering (control) matters. A lot.** The more you control the context, the better the final results you will get.
+The conclusion is pretty simple: context engineering (control) matters. A lot. The more you control the context, the better the final results you will get. 
 
-In particular, I wanted to summarize the three strategies analyzed:
+In particular, I wanted to summarize the three strategies analyzed in the following charts.
 
-- **Raw**: Simple dump everything. The more you dump into it the less you will get out of it. That's why Claude Code has auto-compactification.
-- **Summarization**: Like the broken telephone game. The more you summarize, the more you lose. After multiple summaries, you don't even know what the original task is.
-- **Intent**: Simple, but effective. The more you control the context, the better the results. It will grow, so it has its limits, yet more controllable and higher ceiling than the other two.
+[img]
+
+As simple as that, the more to dump into it the less you will get out of it. That's why Claude Code has auto-compactification.
+
+[img]
+
+In this case, it's clear. The kids game of the broken telephone. The more you summarize, the more you lose. Maybe after the 4th summary you do not even know what the original task is, so probably 42, right?
+
+[img]
+
+And this is the proposed intent approach. Simple, but effective. The more you control the context, the better the results. But, as usual, it will grow, so it also has it's limits, yet more controllable and higher ceiling than the other two.
 
 ### Ok... what should I do then?
 

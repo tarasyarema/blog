@@ -1,5 +1,5 @@
 ---
-title: A (deep) dive into Context Engineering
+title: Benchmarking Context Engineering
 subtitle: Why context engineering is critical, and how to master it.
 date: 2025-11-08
 tags: [ai, agents, context-engineering, llm, langchain]
@@ -29,7 +29,7 @@ To which I answered that I would write a blog post about this topic.
 
 So... here it is!
 
-## Some background
+## Some _context_ (pun intended)
 
 I've been following the AI space really closely for the last year or so, and one thing that seems to be trending in the last months is how important context engineering is. In fact, I would say that more and more people start caring "less" about the context window (when it's more than ~0.5M tokens more or less) as it's clear that one-shotting is not the way to go anymore. Instead, a lot of conversations, and even companies, are focused on finding the best way to "engineer" the context of the models to achieve the best results in complex tasks.
 
@@ -43,7 +43,7 @@ Hence, I decided to spend some time trying to think around this crosswalk, and s
 
 Before going into my thoughts, let's clarify what an agent is for me:
 
-**An agent is a fully/human supervised process that uses LLMs and a set of heterogeneous tools to achieve a specific non-trivial task.**
+> An agent is a process that uses AI with a set of heterogeneous tools to complete a non-trivial task in an unsupervised way.
 
 Where non-trivial means that the task cannot be one-shotted, nor solved in a few rounds. But rather requires phases like researching, planning, analyzing and providing a clear deliverable.
 

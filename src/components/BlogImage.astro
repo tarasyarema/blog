@@ -12,10 +12,21 @@ const { src, alt, caption, width = 700 } = Astro.props;
 ---
 
 <figure>
-  <div style="border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; padding: 1rem 0; display: flex; justify-content: center; width: fit-content; margin: 0 auto;">
-    <Image {src} {alt} {width} />
+  <div style="border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; padding: 1rem 0; display: flex; justify-content: center; margin: 0 auto;">
+    <div style="max-width: 100%; width: 100%; display: flex; justify-content: center;">
+      <Image {src} {alt} {width} />
+    </div>
   </div>
   <figcaption style="margin-top: 0.75rem; font-size: 0.9rem; color: #666; text-align: center;">
     {caption}
   </figcaption>
 </figure>
+
+<style>
+  figure :global(img) {
+    max-width: 100%;
+    height: auto;
+    width: auto;
+    display: block;
+  }
+</style>

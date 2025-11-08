@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "devCommand": "npm run dev",
+  "env": {
+    "ASTRO_TELEMETRY_DISABLED": "1"
+  },
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "errorPage": "404.html"
+}

@@ -5,7 +5,7 @@ import sitemap from "@astrojs/sitemap";
 import expressiveCode from "astro-expressive-code";
 
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://tarasyarema.com",
   integrations: [
     expressiveCode({
       theme: "github-light",

@@ -1,11 +1,15 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "devCommand": "npm run dev",
   "env": {
     "ASTRO_TELEMETRY_DISABLED": "1"
   },
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "errorPage": "404.html"
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/404.html"
+    }
+  ]
 }

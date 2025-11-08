@@ -5,7 +5,7 @@ date: 2020-03-27
 tags: [reversing, advent-of-corona, ctf]
 ---
 
-import { Image } from 'astro:assets';
+import BlogImage from '../../components/BlogImage.astro';
 import aoc6_1 from '../../img/aoc6-1.PNG';
 import aoc6_2 from '../../img/aoc6-2.PNG';
 import aoc6_3 from '../../img/aoc6-3.PNG';
@@ -97,20 +97,20 @@ The basic steps to begin analyzing a binary are the following:
 
 Pretty straight-forward.
 
-<Image src={aoc6_1} alt="Ghidra import dialog" />
+<BlogImage src={aoc6_1} alt="Ghidra import dialog" caption="Importing a binary file into Ghidra" />
 
 #### Analyze it
 
 Just analyze all.
 
-<Image src={aoc6_2} alt="Ghidra analyze dialog" />
+<BlogImage src={aoc6_2} alt="Ghidra analyze dialog" caption="Running the automatic analysis in Ghidra" />
 
 #### Reversing
 
 First of all, I look that the functions panel and search for the `main` function.
 When you click at it it shows up a _C-like_ decompiled view of the function.
 
-<Image src={aoc6_3} alt="Main function in Ghidra" />
+<BlogImage src={aoc6_3} alt="Main function in Ghidra" caption="Viewing the decompiled main function" />
 
 One of the things I like about Ghidra is that it lets you redefine variable types and names. So you can change those definitions during the reversing and the flow is much easier to follow.
 
@@ -118,7 +118,7 @@ The first thing I do is redefine the main function to be `int main (void)` and t
 I notice that there are two `scanf` in the main function: `00100c17` and `00100d2e`.
 So I redefine the values written to as `input_1` and `input_2`.
 
-<Image src={aoc6_4} alt="Ghidra variable redefinition" />
+<BlogImage src={aoc6_4} alt="Ghidra variable redefinition" caption="Redefining variables to improve code readability" />
 
 We now know the expected types of inputs: `uint input_2` and `char *input_2`.
 

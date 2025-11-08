@@ -5,7 +5,7 @@ date: 2021-03-01
 tags: [go-lang, pointers, programming]
 ---
 
-import { Image } from 'astro:assets';
+import BlogImage from '../../components/BlogImage.astro';
 import stripeDrama from '../../img/stripe-drama-1.PNG';
 
 ## Introduction
@@ -192,7 +192,7 @@ number of (not few) hours migrating every primitive field of every struct of str
 to be pointers and making the tests pass... Which end up being much harder than expected
 because of a _hidden forgotten channel_ in one of the tests (I may talk about that another day).
 
-<Image src={stripeDrama} alt="Small commit showing changes" />
+<BlogImage src={stripeDrama} alt="Small commit showing changes" caption="An example of the pointer conversion changes made to the Stripe Go package" />
 
 Finally, we deployed our own version and started using it, which yielded to the wanted results!
 

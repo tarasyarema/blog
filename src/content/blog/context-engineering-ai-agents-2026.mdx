@@ -5,13 +5,27 @@ date: 2025-11-08
 tags: [ai, agents, context-engineering, llm, langchain]
 ---
 
+import BlogImage from '../../components/BlogImage.astro';
+import linkedinPost from '../../../src/img/context-eng/linkedin-post.png';
+import linkedinReply from '../../../src/img/context-eng/linkedin-post-reply.png';
+import successRate from '../../../src/img/context-eng/success_rate.png';
+import accuracyScore from '../../../src/img/context-eng/accuracy_score.png';
+import stepCount from '../../../src/img/context-eng/step_count.png';
+import tokenUsage from '../../../src/img/context-eng/token_usage.png';
+import executionTime from '../../../src/img/context-eng/execution_time.png';
+import costComparison from '../../../src/img/context-eng/cost_comparison.png';
+import tokensVsSteps from '../../../src/img/context-eng/tokens_vs_steps.png';
+import rawAgent from '../../../src/img/context-eng/raw-agent.png';
+import summarizeAgent from '../../../src/img/context-eng/summarize-agent.png';
+import intentAgent from '../../../src/img/context-eng/intent-agent.png';
+
 Last week I was procrastinating in LinkedIn, and I stumbled upon a post about AI agents
 
-[img]
+<BlogImage src={linkedinPost} alt="The original LinkedIn post" caption="The original LinkedIn post that sparked this research" />
 
-To which I answered that I would write a blog post about this topic. 
+To which I answered that I would write a blog post about this topic.
 
-[img]
+<BlogImage src={linkedinReply} alt="My reply on the thread" caption="My commitment to write about context engineering" />
 
 So... here it is!
 
@@ -166,23 +180,23 @@ The models chosen were: `anthropic-claude-sonnet-4.5`, `openai-gpt-4.1-mini`, `g
 
 The most important thing to check first is success rates. I.e., did the agent finish the task or not? For that the "intent" agent scored a 100% rate in all models and all runs. The second best was the raw with only flakiness in GPT-4.1-mini, and the last one with pretty bad results was the summarization one.
 
-[img]
+<BlogImage src={successRate} alt="Success rates" caption="Success rates across all models and agent approaches" width={700} />
 
 #### Accuracy
 
 The accuracy was not the best in general, probably due to the models used. However you can see that the intent one scored consistently higher across models than the other two, which were pretty close to each other, in fact they followed similar patterns, being the summarization one slightly worse.
 
-[img]
+<BlogImage src={accuracyScore} alt="Accuracy comparison" caption="Accuracy comparison between different context engineering approaches" width={700} />
 
 #### Context usage
 
 Before checking the result in terms of context, I want to note how much steps each agent needed to finish the task, which surprised me:
 
-[img]
+<BlogImage src={stepCount} alt="Step count comparison" caption="Step count required for each agent to complete the task" width={700} />
 
 The intent one is consistent even across models and much less than the other two (fewer than 25 steps).
 
-[img]
+<BlogImage src={tokenUsage} alt="Token usage across steps" caption="Token usage scaling across execution steps" width={700} />
 
 Now in terms of context usage, I analyzed the token usage, both for input and output, and the results showed a clear difference in the raw one, being the highest, and the summarization and intent being pretty close.
 
@@ -190,13 +204,13 @@ Now in terms of context usage, I analyzed the token usage, both for input and ou
 
 The intent one was the slower one. I used OpenRouter and generally the latencies might not be super consistent. In general all were able to finish in less than 4 minutes.
 
-[img]
+<BlogImage src={executionTime} alt="Execution time comparison" caption="Total execution time for completing the task" width={700} />
 
 #### Cost
 
 Finally, I will mention the cost, in which obviously the raw one won, and then the summarized one was pretty close to the intent or even cheaper. This is not surprising due to the nature of summarization being a plateau in terms of context limits.
 
-[img]
+<BlogImage src={costComparison} alt="Cost comparison" caption="API cost comparison across different approaches" width={700} />
 
 #### Full report
 
@@ -240,7 +254,7 @@ This, obviously, is more tedious and has a default context bump, as the template
 
 The good thing, as you can see, is that it generally requires less steps due to the deterministic compactification, and is scaled more linearly than the raw approach.
 
-[img]
+<BlogImage src={tokensVsSteps} alt="Tokens vs steps" caption="Correlation between tokens consumed and steps required" width={700} />
 
 ## Conclusion
 
@@ -248,15 +262,15 @@ The conclusion is pretty simple: context engineering (control) matters. A lot. T
 
 In particular, I wanted to summarize the three strategies analyzed in the following charts.
 
-[img]
+<BlogImage src={rawAgent} alt="Raw approach - all agents" caption="Raw approach: simple append-only message history" width={700} />
 
 As simple as that, the more to dump into it the less you will get out of it. That's why Claude Code has auto-compactification.
 
-[img]
+<BlogImage src={summarizeAgent} alt="Summarization approach" caption="Summarization approach: auto-compressing history with middleware" width={700} />
 
 In this case, it's clear. The kids game of the broken telephone. The more you summarize, the more you lose. Maybe after the 4th summary you do not even know what the original task is, so probably 42, right?
 
-[img]
+<BlogImage src={intentAgent} alt="Intent approach" caption="Intent approach: deterministic context control with reusable template" width={700} />
 
 And this is the proposed intent approach. Simple, but effective. The more you control the context, the better the results. But, as usual, it will grow, so it also has it's limits, yet more controllable and higher ceiling than the other two.
 

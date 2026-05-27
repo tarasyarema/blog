@@ -9,7 +9,7 @@ const sortedPosts = allPosts.sort((a, b) =>
 
 const posts = sortedPosts.map((post) => ({
   ...post,
-  url: `/blog/${post.slug}`,
+  url: `/blog/${post.id}`,
 }));
 ---
 
@@ -109,7 +109,7 @@ const posts = sortedPosts.map((post) => ({
         subtitle: post.data.subtitle,
         tags: post.data.tags.join(" "),
         content: post.body,
-        slug: post.slug,
+        slug: post.id,
         url: post.url,
         fullPost: post,
       }));

@@ -49,7 +49,7 @@ const sortedPosts = taggedPosts.sort(
         <div>
           {sortedPosts.map((post) => (
             <article style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid #e5e5e5;">
-              <a href={`/blog/${post.slug}`} style="text-decoration: none; color: inherit;">
+              <a href={`/blog/${post.id}`} style="text-decoration: none; color: inherit;">
                 <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
                   {post.data.title}
                 </h2>

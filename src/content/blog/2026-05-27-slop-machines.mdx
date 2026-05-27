@@ -1,0 +1,121 @@
+---
+title: Slop Machines
+subtitle: On why Polsia is the biggest slop machine we've seen to date
+date: 2026-05-28
+tags: [ai, slop, agent-swarm]
+---
+
+import BlogImage from '../../components/BlogImage.astro';
+import before from '../../img/slop-machines/breaking-bad-rich.jpg';
+import after from '../../img/slop-machines/breaking-bad-cry.jpg';
+
+Last week [Polsia announced a $30M round](https://x.com/Bencera/status/2057847644966547920), and here's what I think about it.
+
+> It's the **biggest expression of automated AI slop** we've seen to date. 
+
+That's it. There's no other way to put it. Let's see why.
+
+### Disclaimer
+
+I want to make it clear that it's not a Polsia specific critique, it applies to all the other companies that follow the same narrative (because it's purely a narrative, not a product). In the case of [Polsia](https://polsia.com) it's:
+
+> AI That Runs Your Company While You Sleep
+
+## What's the goal of Polsia?
+
+The premise of these companies is the following:
+
+1. You input a prompt of what you want to build, e.g. "Social media for cat lovers";
+2. You pay (generally a monthly subscription);
+3. Their AI starts working.
+
+What they promise that will happen after that is:
+
+1. The AI will build the product (design, code, etc.);
+2. The AI will handle the infra, hosting, scaling, etc.;
+3. The AI will handle growth enginerring (outbound, SEO, etc.);
+4. The AI will handle ads (generally you pay for this separately);
+5. If all the above works due to pure luck, it will handle payments for you (they will get a cut of the revenue).
+
+There are more things like customer support that are not even mentioned, as it's already too much to promise. And obviously it requires a simple yet extremely hard thing to happen: someone pays you.
+
+<BlogImage src={before} alt="Breaking Bad money scene" caption="This is how you look when you onboard in Polsia" />
+
+Note also that all of the above are promised to happen completely autonomously, without any human intervention. Even though currently you might get somehow involved, that's for sure the VC pitch, if not there's no way to raise $30M for that...
+
+## What is the actual outcome of Polsia?
+
+The actual _promise resolutions_ are:
+
+- You (as the user) completely lose control of your porduct;
+- Due to the previous, how your product is exposed to the world will 100% be misaligned with your vision;
+- If for some reason you push the "God mode", the amount of data it will generate will become unmanageable in days;
+- You get locked in into the company offering you this service.
+
+Let's break them down.
+
+### Removing yourself from the loop = Outcome will be 100% wrong
+
+Anyone that use any of the last models (gpt-5.5 or Opus 4.7) knows that to make agents run for a long period of time is extremely hard. But it's not hard because it's not possible, instead what happens is that it's tricky to keep the agent steered in the right direction as context grows (both in session and contextual).
+
+Generally you are able to run agent now for hour or even days, but your human input (even if for a minute) is key. Hence my take is that if you did not get in the loop for days, most probably what you will get is 100% pure AI slop crystals.
+
+If you do not believe me about the 100%, you haven't used AI enough (if at all).
+
+> Can you synthetize a company vision in a prompt? You ~can~ should not. 
+
+Good companies are build through a painfully long iterative process, that requires the human touch to _be right_. Hence, it's not that what the AI will do is not good, it's simply not what you want.
+
+If your goal is to build a company in particular, it won't work. The only way that this approach _could work_ is if your prompt is: **make me money**.
+
+### The Slop mountain = Cognitive meltdown
+
+What happens if you drunkly accept these terms and check out after a few days? 
+
+> You will drown in slop. 
+
+AI is able to generate much more content than humans. Remember when you go on vacations for a week or two, and check your email after that? That will happen on a weekly basis, if not daily.
+
+Note: _A recent study by Graphite that states that AI generated content catched up human generated content, [read more here](https://graphite.io/five-percent/ai-now-writes-as-many-online-articles-as-humans-do)._
+
+It also has consequences. One thing is generating articles for SEO iptimization, but another is spamming random people with outbound messages (which as we saw before, you do not even know if they align with your vision), burning your domain reputation (if you had the brilliant idea of using an existing one), or, even worse, you start leaking sensitive info without you even noticing it. This leads me to the last point.
+
+### Lock-in in the world of AI = Trouble assured
+
+If you follow the latest news, we are seeing a trend of hacks, supply chain attacks, and big lab pricing changes that happen on a daily basis. All of these, when you are not in control of how your product is built and ran, ~can~ will have a huge impact on your business.
+
+If for some reason your company does manage to sell, then any hacks to Polsia would affect all its companies, and, in particular, **yours**. 
+
+> You **will** get hacked, you **will** get your data leaked, you **will** get billed more, and you **won't** be able to do anything about it.
+
+Going back to the Breaking Bad meme...
+
+<BlogImage src={after} alt="Breaking Bad cry scene" caption="This is how you look when you use Polsia for a week" />
+
+On the other end, the complete de-humanization of these products make them really easily replicable by the big labs. The value added to the you (a part from _pure revenue_) is 0. If the labs push for longer executions, and more autonomous agents, Polsia would be replicable by connecting a few MCPs to Claude.ai.
+
+### Why I could be wrong
+
+The only reasonable scenario in which I see this working is if a ton of companies get automated to the extend of doing their own procurement, growth, etc. without human intervention. Then those could become the clients of Polsia created companies.
+
+Even if that happens, we are not ready for this, and our guardrails and human processes either.
+
+## Now what?
+
+I've been building [agent-swarm](https://agent-swarm.dev) since novembder last year. And seeing these companies appear is a re-assurance of what direction we should _not_ follow. 
+
+The core premise of agent-swarm is that you build and "hire" a team of agents that specifically learn and onboard in your company. The ultimate goal is that it's what will help you become really AI native, while being in complete control of the processes, the AI, and the data.
+
+We do not promise autonomy at first. It's something the swarm needs to learn, and you as its manager should progressively allow.
+
+And it's Open Source, so you own 100% of the data. Check it out! 
+
+> [github.com/desplega-ai/agent-swarm](https://github.com/desplega-ai/agent-swarm)
+
+So... let's get some popcorn, and see how this unfolds.
+
+## Interesting reads
+
+- [$30M for AI Slop](https://zero-arr.vercel.app)
+- [@brookejlacey analysis on X](https://x.com/brookejlacey/status/2059362649889178090)
+- [24h Inside a $30M Silicon Valley AI Startup with No Employees (YouTube)](https://www.youtube.com/watch?v=OpsGJaijG10)

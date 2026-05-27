@@ -48,15 +48,53 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <title>{title}</title>
 
+    <script is:inline>
+      (function () {
+        try {
+          const stored = localStorage.getItem("theme");
+          const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme = stored || (prefersDark ? "dark" : "light");
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
+
     <style>
       :root {
-        --color-bg: #ffffff;
-        --color-text: #000000;
-        --color-link: #666666;
-        --color-link-hover: #000000;
+        /* Vintage paper — warm off-white, near-black ink */
+        --color-bg: #f3ece0;
+        --color-paper: #ece3d2;
+        --color-text: #1a1611;
+        --color-text-soft: #2a241c;
+        --color-link: #5a4f3f;
+        --color-link-hover: #1a1611;
+        --color-border: #c9bda4;
+        --color-rule: #b3a586;
+        --color-code-bg: #e6dcc4;
+        --color-code-border: #c9bda4;
+        --color-fade: 243, 236, 224;
+        --color-accent: #1a1611;
         --max-width: 900px;
         --font-display: "Funnel Display", sans-serif;
         --font-mono: "Roboto Mono", monospace;
+      }
+
+      :root[data-theme="dark"] {
+        /* Inverted ink — old typewriter ribbon on aged carbon */
+        --color-bg: #14110b;
+        --color-paper: #1d1812;
+        --color-text: #ede4cf;
+        --color-text-soft: #c9bea4;
+        --color-link: #a89c84;
+        --color-link-hover: #ede4cf;
+        --color-border: #3a3226;
+        --color-rule: #4a4030;
+        --color-code-bg: #1f1a13;
+        --color-code-border: #3a3226;
+        --color-fade: 20, 17, 11;
+        --color-accent: #ede4cf;
       }
 
       * {
@@ -75,16 +113,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         color: var(--color-text);
         line-height: 1.6;
         font-size: 18px;
+        transition: background-color 0.2s ease, color 0.2s ease;
       }
 
       a {
         color: var(--color-link);
         text-decoration: none;
-        transition: color 0.2s;
+        transition: color 0.2s, text-decoration-color 0.2s;
       }
 
       a:hover {
         color: var(--color-link-hover);
+        text-decoration-color: var(--color-link-hover);
       }
 
       code {
@@ -95,16 +135,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       /* Inline code styling */
       p code,
       li code {
-        background-color: #f0f0f0;
-        padding: 0.2em 0.4em;
-        border-radius: 3px;
+        background-color: var(--color-code-bg);
+        border: 1px solid var(--color-code-border);
+        padding: 0.1em 0.4em;
+        border-radius: 2px;
         font-size: 0.85em;
+        color: var(--color-text);
       }
 
       /* Search input styling */
       input[type="text"] {
         outline: none;
         border-color: var(--color-text);
+        background-color: var(--color-bg);
+        color: var(--color-text);
       }
 
       input[type="text"]:focus {
@@ -119,8 +163,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         height: auto;
         display: block;
         margin: 2rem auto;
-        border-radius: 6px;
-        transition: opacity 0.3s ease;
+        border-radius: 2px;
+        border: 1px solid var(--color-border);
+        filter: grayscale(0.35) contrast(0.96) sepia(0.08);
+        transition: opacity 0.3s ease, filter 0.3s ease;
       }
 
       img:hover {
@@ -136,10 +182,202 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         max-width: 100%;
         height: auto;
       }
+
+      /* Page-edge fade gradients */
+      .page-fade {
+        position: fixed;
+        left: 0;
+        right: 0;
+        height: 80px;
+        pointer-events: none;
+        z-index: 30;
+      }
+
+      .page-fade--top {
+        top: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(var(--color-fade), 1) 0%,
+          rgba(var(--color-fade), 0) 100%
+        );
+      }
+
+      .page-fade--bottom {
+        bottom: 0;
+        background: linear-gradient(
+          to top,
+          rgba(var(--color-fade), 1) 0%,
+          rgba(var(--color-fade), 0) 100%
+        );
+      }
+
+      /* Floating buttons (theme + back-to-top) */
+      .floating-stack {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 100;
+      }
+
+      .floating-btn {
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--color-rule);
+        background-color: var(--color-paper);
+        color: var(--color-text);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: 1rem;
+        line-height: 1;
+        transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+        box-shadow: 0 1px 0 var(--color-rule), 0 2px 10px rgba(26, 22, 17, 0.1);
+      }
+
+      .floating-btn:hover {
+        background-color: var(--color-code-bg);
+      }
+
+      #back-to-top {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(8px);
+      }
+
+      #back-to-top.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .theme-icon-dark,
+      :root[data-theme="dark"] .theme-icon-light {
+        display: none;
+      }
+
+      :root[data-theme="dark"] .theme-icon-dark {
+        display: inline;
+      }
+    </style>
+
+    <style is:global>
+      blockquote {
+        margin: 2rem 0;
+        padding: 0.25rem 0 0.25rem 1.5rem;
+        border-left: 3px solid var(--color-text);
+        line-height: 1.55;
+        color: var(--color-text);
+        font-style: italic;
+      }
+
+      blockquote p {
+        margin: 0;
+      }
+
+      blockquote p + p {
+        margin-top: 0.75rem;
+      }
+
+      blockquote a {
+        color: var(--color-text);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      /* Expressive Code blocks */
+      .expressive-code {
+        margin: 1.75rem 0;
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid var(--color-rule);
+        margin: 2.5rem 0;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        color: var(--color-text);
+      }
+
+      /* Prose link underlines — vintage typewriter feel */
+      .post-content a,
+      .prose a {
+        color: var(--color-text);
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+        text-decoration-color: var(--color-rule);
+        transition: color 0.2s, text-decoration-color 0.2s;
+      }
+
+      .post-content a:hover,
+      .prose a:hover {
+        color: var(--color-link-hover);
+        text-decoration-color: var(--color-link-hover);
+      }
     </style>
   </head>
   <body>
+    <div class="page-fade page-fade--top"></div>
+
     <slot />
+
+    <div class="page-fade page-fade--bottom"></div>
+
+    <div class="floating-stack">
+      <button
+        id="back-to-top"
+        class="floating-btn"
+        type="button"
+        aria-label="Back to top"
+        title="Back to top"
+      >
+        ↑
+      </button>
+      <button
+        id="theme-toggle"
+        class="floating-btn"
+        type="button"
+        aria-label="Toggle theme"
+        title="Toggle theme"
+      >
+        <span class="theme-icon-light" aria-hidden="true">☾</span>
+        <span class="theme-icon-dark" aria-hidden="true">☀</span>
+      </button>
+    </div>
+
+    <script>
+      const themeToggle = document.getElementById("theme-toggle");
+      themeToggle?.addEventListener("click", () => {
+        const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        try {
+          localStorage.setItem("theme", next);
+        } catch (e) {}
+      });
+
+      const backToTop = document.getElementById("back-to-top");
+      const onScroll = () => {
+        if (!backToTop) return;
+        if (window.scrollY > 400) {
+          backToTop.classList.add("is-visible");
+        } else {
+          backToTop.classList.remove("is-visible");
+        }
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      backToTop?.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    </script>
 
     <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://plausible.io/js/pa-BcpYxVF-lMSX5isLmCyLI.js"></script>

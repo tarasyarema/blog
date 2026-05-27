@@ -1,21 +1,55 @@
 ---
 import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
 import { getCollection, render } from "astro:content";
+import { readTimeLabel } from "../../utils/readTime";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post, allPosts: posts },
   }));
 }
 
 interface Props {
   post: any;
+  allPosts: any[];
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, allPosts } = Astro.props;
+const { Content, headings } = await render(post);
+
+const explicitSlugs: string[] = post.data.related ?? [];
+const byId = new Map(allPosts.map((p) => [p.id, p]));
+
+let relatedPosts: typeof allPosts = [];
+if (explicitSlugs.length > 0) {
+  relatedPosts = explicitSlugs
+    .map((slug) => byId.get(slug))
+    .filter((p) => p && p.id !== post.id);
+} else {
+  const tagSet = new Set<string>(post.data.tags);
+  relatedPosts = allPosts
+    .filter((p) => p.id !== post.id)
+    .map((p) => ({
+      post: p,
+      overlap: p.data.tags.filter((t: string) => tagSet.has(t)).length,
+    }))
+    .filter((x) => x.overlap > 0)
+    .sort((a, b) => {
+      if (b.overlap !== a.overlap) return b.overlap - a.overlap;
+      return new Date(b.post.data.date).getTime() - new Date(a.post.data.date).getTime();
+    })
+    .slice(0, 3)
+    .map((x) => x.post);
+}
+
+const related = relatedPosts.map((p) => ({
+  id: p.id,
+  title: p.data.title,
+  subtitle: p.data.subtitle,
+  date: p.data.date,
+}));
 ---
 
 <BlogPostLayout
@@ -24,6 +58,10 @@ const { Content } = await render(post);
   date={post.data.date}
   tags={post.data.tags}
   description={post.data.subtitle}
+  image={post.data.image}
+  readTimeLabel={readTimeLabel(post.body)}
+  headings={headings}
+  related={related}
 >
   <Content />
 </BlogPostLayout>

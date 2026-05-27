@@ -1,6 +1,19 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface RelatedPost {
+  id: string;
+  title: string;
+  subtitle: string;
+  date: Date;
+}
+
 interface Props {
   title: string;
   subtitle: string;
@@ -8,65 +21,313 @@ interface Props {
   tags: string[];
   description?: string;
   image?: string;
+  readTimeLabel: string;
+  headings: Heading[];
+  related: RelatedPost[];
 }
 
-const { title, subtitle, date, tags, description, image } = Astro.props;
+const {
+  title,
+  subtitle,
+  date,
+  tags,
+  description,
+  image,
+  readTimeLabel,
+  headings,
+  related,
+} = Astro.props;
 
 const formattedDate = new Date(date).toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
   day: "numeric",
 });
+
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 ---
 
 <BaseLayout title={title} description={description || subtitle} image={image}>
-  <main style="padding: 3rem 1.5rem; max-width: var(--max-width); margin: 0 auto;">
+  <main class="post-main">
     <article>
-      <header style="margin-bottom: 3rem;">
-        <div style="margin-bottom: 1.5rem;">
-          <a href="/" style="font-size: 0.875rem; color: var(--color-link);">← Back to posts</a>
+        <header style="margin-bottom: 3rem;">
+          <div style="margin-bottom: 1.5rem;">
+            <a href="/" style="font-size: 0.875rem; color: var(--color-link);">← Back to posts</a>
+          </div>
+
+          <h1 id="post-title" style="font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2;">
+            {title}
+          </h1>
+
+          <p style="font-size: 1.25rem; color: var(--color-link); margin-bottom: 1rem;">
+            {subtitle}
+          </p>
+
+          <p style="color: var(--color-link); font-size: 0.95rem;">
+            {formattedDate} · {readTimeLabel}
+          </p>
+
+          {tags.length > 0 && (
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              {tags.map((tag) => (
+                <a
+                  href={`/tags/${tag}`}
+                  style="
+                    display: inline-block;
+                    padding: 0.25rem 0.75rem;
+                    border: 1px solid var(--color-text);
+                    border-radius: 2px;
+                    font-size: 0.85rem;
+                    color: var(--color-text);
+                  "
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <div class="post-content" style="font-size: 1.05rem; line-height: 1.8; color: var(--color-text);">
+          <slot />
         </div>
 
-        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; line-height: 1.2;">
-          {title}
-        </h1>
+        <section class="related-section" aria-labelledby="related-heading">
+          <h2 id="related-heading" style="font-size: 1.25rem; margin-bottom: 1rem;">
+            Related articles
+          </h2>
+          {related.length > 0 ? (
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              {related.map((post) => (
+                <li style="padding: 0.75rem 0; border-bottom: 1px solid var(--color-border);">
+                  <a href={`/blog/${post.id}`} style="text-decoration: none; color: inherit; display: block;">
+                    <div style="font-size: 1.05rem; color: var(--color-text); margin-bottom: 0.15rem;">
+                      {post.title}
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--color-link);">
+                      {post.subtitle}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style="color: var(--color-link); font-size: 0.95rem;">
+              No related articles yet.
+            </p>
+          )}
+        </section>
+      </article>
+    </main>
 
-        <p style="font-size: 1.25rem; color: var(--color-link); margin-bottom: 1rem;">
-          {subtitle}
-        </p>
-
-        <p style="color: var(--color-link); font-size: 0.95rem;">
-          {formattedDate}
-        </p>
-
-        {tags.length > 0 && (
-          <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
-            {tags.map((tag) => (
-              <a
-                href={`/tags/${tag}`}
-                style="
-                  display: inline-block;
-                  padding: 0.25rem 0.75rem;
-                  border: 1px solid var(--color-text);
-                  border-radius: 2px;
-                  font-size: 0.85rem;
-                  color: var(--color-text);
-                "
-              >
-                #{tag}
-              </a>
-            ))}
+    {tocHeadings.length > 0 && (
+      <aside class="post-toc" aria-label="Table of contents">
+        <div class="post-toc-divider"></div>
+        <div class="post-toc-inner">
+          <div class="post-toc-title" id="post-toc-title" data-title={title} aria-hidden="true">
+            {title}
           </div>
-        )}
-      </header>
-
-      <div style="
-        font-size: 1.05rem;
-        line-height: 1.8;
-        color: var(--color-text);
-      ">
-        <slot />
-      </div>
-    </article>
-  </main>
+          <div class="post-toc-label">On this page</div>
+          <nav>
+            <ul>
+              {tocHeadings.map((h) => (
+                <li class={`toc-depth-${h.depth}`}>
+                  <a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </aside>
+    )}
 </BaseLayout>
+
+<style>
+  .post-main {
+    padding: 3rem 1.5rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  .related-section {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Fixed TOC pinned to the right of the article, full-viewport-height divider */
+  .post-toc {
+    display: none;
+  }
+
+  @media (min-width: 1180px) {
+    .post-toc {
+      display: block;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      /* Article column ends at (50vw + max-width/2). Add a gutter, then place TOC. */
+      left: calc(50vw + var(--max-width) / 2 + 2rem);
+      width: 220px;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .post-toc-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 1px;
+      background-color: var(--color-rule);
+    }
+
+    .post-toc-inner {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      right: 0;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      pointer-events: auto;
+    }
+  }
+
+  .post-toc-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text);
+    border-bottom: 0 solid var(--color-rule);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease, max-height 0.2s ease,
+      margin-bottom 0.2s ease, padding-bottom 0.2s ease;
+    pointer-events: none;
+  }
+
+  .post-toc-title.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 3rem;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.6rem;
+    border-bottom-width: 1px;
+  }
+
+  .post-toc-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    color: var(--color-link);
+    margin-bottom: 0.75rem;
+  }
+
+  .post-toc nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .post-toc nav li {
+    margin: 0.25rem 0;
+  }
+
+  .post-toc .toc-depth-3 {
+    padding-left: 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .post-toc nav a {
+    color: var(--color-link);
+    line-height: 1.4;
+    display: block;
+    padding: 0.1rem 0;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .post-toc nav a:hover {
+    color: var(--color-link-hover);
+    text-decoration: none;
+  }
+
+  .post-toc nav a.is-active {
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>(".post-content a[href]");
+  const origin = window.location.origin;
+  links.forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    if (href.startsWith("#")) return;
+    const isInternal =
+      href.startsWith("/") ||
+      href.startsWith("./") ||
+      href.startsWith("../") ||
+      href.startsWith(origin);
+    if (!isInternal) {
+      a.setAttribute("target", "_blank");
+      a.setAttribute("rel", "noopener noreferrer");
+    }
+  });
+
+  const postTitleEl = document.getElementById("post-title");
+  const tocTitleEl = document.getElementById("post-toc-title");
+  if (postTitleEl && tocTitleEl) {
+    const titleObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+        if (entry.isIntersecting) {
+          tocTitleEl.classList.remove("is-visible");
+        } else {
+          tocTitleEl.classList.add("is-visible");
+        }
+      },
+      { threshold: 0 }
+    );
+    titleObserver.observe(postTitleEl);
+  }
+
+  const tocLinks = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(".post-toc a[data-toc-link]")
+  );
+  if (tocLinks.length > 0) {
+    const linkBySlug = new Map(
+      tocLinks.map((l) => [l.dataset.tocLink || "", l] as const)
+    );
+    const headings = tocLinks
+      .map((l) => document.getElementById(l.dataset.tocLink || ""))
+      .filter((el): el is HTMLElement => !!el);
+
+    const setActive = (slug: string) => {
+      tocLinks.forEach((l) => l.classList.remove("is-active"));
+      const active = linkBySlug.get(slug);
+      if (active) active.classList.add("is-active");
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible?.target?.id) setActive(visible.target.id);
+      },
+      { rootMargin: "0px 0px -75% 0px", threshold: 0 }
+    );
+    headings.forEach((h) => observer.observe(h));
+  }
+</script>

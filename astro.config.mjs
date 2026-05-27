@@ -8,10 +8,14 @@ export default defineConfig({
   site: "https://www.tarasyarema.com",
   integrations: [
     expressiveCode({
-      theme: "github-light",
+      themes: ["github-light", "github-dark"],
+      useDarkModeMediaQuery: false,
+      themeCssSelector: (theme) => `[data-theme='${theme.type}']`,
       styleOverrides: {
         codeFontSize: "0.875em",
-        codepadding: "1.25rem 1.5rem",
+        codePaddingBlock: "1.25rem",
+        codePaddingInline: "1.5rem",
+        borderRadius: "2px",
       },
     }),
     mdx({

@@ -57,7 +57,13 @@ const posts = sortedPosts.map((post) => ({
     <div id="posts-container">
       {
         posts.map((post) => (
-          <article style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--color-border);">
+          <article class:list={["post-card", { "has-thumb": post.data.image }]}>
+            {post.data.image && (
+              <a href={post.url} class="post-card-thumb" tabindex="-1" aria-hidden="true">
+                <img src={post.data.image} alt="" loading="lazy" decoding="async" width="1200" height="628" />
+              </a>
+            )}
+            <div class="post-card-body">
             <a href={post.url} style="text-decoration: none; color: inherit;">
               <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
                 {post.data.title}
@@ -94,6 +100,7 @@ const posts = sortedPosts.map((post) => ({
                 ))}
               </div>
             )}
+            </div>
           </article>
         ))
       }
@@ -135,6 +142,59 @@ const posts = sortedPosts.map((post) => ({
     }
   </style>
 
+  <style is:global>
+    .post-card {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .post-card.has-thumb {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 240px;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .post-card-body {
+      min-width: 0;
+    }
+
+    .post-card-thumb {
+      grid-column: 2;
+      grid-row: 1;
+      display: block;
+    }
+
+    .post-card-thumb img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1200 / 628;
+      object-fit: cover;
+      margin: 0;
+      border: 1px solid var(--color-border);
+      border-radius: 2px;
+      transition: opacity 0.2s ease;
+    }
+
+    .post-card-thumb:hover img {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 640px) {
+      .post-card.has-thumb {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.25rem;
+      }
+
+      .post-card-thumb {
+        grid-column: 1;
+        grid-row: 1;
+      }
+    }
+  </style>
+
   <script type="module" define:vars={{ posts }}>
     (async () => {
       const Fuse = (await import('https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.mjs')).default;
@@ -172,7 +232,13 @@ const posts = sortedPosts.map((post) => ({
         postsContainer.innerHTML = postsToRender
           .map(
             (post) => `
-          <article style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--color-border);">
+          <article class="post-card${post.fullPost.data.image ? " has-thumb" : ""}">
+            ${
+              post.fullPost.data.image
+                ? `<a href="${post.url}" class="post-card-thumb" tabindex="-1" aria-hidden="true"><img src="${post.fullPost.data.image}" alt="" loading="lazy" decoding="async" width="1200" height="628" /></a>`
+                : ""
+            }
+            <div class="post-card-body">
             <a href="${post.url}" style="text-decoration: none; color: inherit;">
               <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
                 ${post.title}
@@ -212,6 +278,7 @@ const posts = sortedPosts.map((post) => ({
                   </div>`
                 : ""
             }
+            </div>
           </article>
         `
           )

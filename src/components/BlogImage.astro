@@ -9,12 +9,14 @@ interface Props {
 }
 
 const { src, alt, caption, width = 700 } = Astro.props;
+// Never upscale: a small source keeps its natural size.
+const renderWidth = Math.min(width, src.width);
 ---
 
 <figure>
   <div style="border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; padding: 1rem 0; display: flex; justify-content: center; margin: 0 auto;">
     <div style="max-width: 100%; width: 100%; display: flex; justify-content: center;">
-      <Image {src} {alt} {width} />
+      <Image {src} {alt} width={renderWidth} data-zoom-src={src.src} />
     </div>
   </div>
   <figcaption style="margin-top: 0.75rem; font-size: 0.9rem; color: #666; text-align: center;">
@@ -26,7 +28,6 @@ const { src, alt, caption, width = 700 } = Astro.props;
   figure :global(img) {
     max-width: 100%;
     height: auto;
-    width: auto;
     display: block;
   }
 </style>

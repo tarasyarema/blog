@@ -1,0 +1,73 @@
+---
+// Enhances every link inside an element with the `rich-links` class:
+// the link opens in a new tab, gets the target site's logo before the text,
+// and gets a faint external-link arrow after it that darkens on hover.
+---
+
+<style is:global>
+  .rich-links a .link-favicon {
+    display: inline-block;
+    width: 0.95em;
+    height: 0.95em;
+    margin: 0 0.3em 0 0;
+    vertical-align: -0.12em;
+    border: none;
+    border-radius: 2px;
+  }
+
+  .rich-links a .link-external-icon {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    margin-left: 0.15em;
+    vertical-align: 0.05em;
+    opacity: 0.45;
+    transition: opacity 0.15s ease;
+  }
+
+  .rich-links a:hover .link-external-icon,
+  .rich-links a:focus-visible .link-external-icon {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const origin = window.location.origin;
+  const externalIconSvg =
+    '<svg aria-hidden="true" class="link-external-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
+
+  document.querySelectorAll<HTMLAnchorElement>(".rich-links a[href]").forEach((a) => {
+    const href = a.getAttribute("href") || "";
+    if (href.startsWith("#") || href.startsWith("mailto:")) return;
+
+    // Every link opens in a new tab.
+    a.setAttribute("target", "_blank");
+    a.setAttribute("rel", "noopener noreferrer");
+
+    // Links that wrap an image keep their content as is.
+    if (a.querySelector("img")) return;
+
+    let url: URL;
+    try {
+      url = new URL(href, origin);
+    } catch {
+      return;
+    }
+    const isInternal = url.origin === origin;
+
+    const favicon = document.createElement("img");
+    favicon.className = "link-favicon";
+    favicon.alt = "";
+    favicon.width = 16;
+    favicon.height = 16;
+    favicon.loading = "lazy";
+    favicon.decoding = "async";
+    favicon.src = isInternal
+      ? "/favicon-32x32.png"
+      : `https://www.google.com/s2/favicons?domain=${encodeURIComponent(url.hostname)}&sz=32`;
+    favicon.addEventListener("error", () => favicon.remove());
+    a.prepend(favicon);
+
+    a.insertAdjacentHTML("beforeend", externalIconSvg);
+  });
+</script>

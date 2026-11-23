@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import RichLinks from "../components/RichLinks.astro";
 
 interface Heading {
   depth: number;
@@ -88,7 +89,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
           )}
         </header>
 
-        <div class="post-content" style="font-size: 1.05rem; line-height: 1.8; color: var(--color-text);">
+        <div class="post-content rich-links" style="font-size: 1.05rem; line-height: 1.8; color: var(--color-text);">
           <slot />
         </div>
 
@@ -127,7 +128,6 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
           <div class="post-toc-title" id="post-toc-title" data-title={title} aria-hidden="true">
             {title}
           </div>
-          <div class="post-toc-label">On this page</div>
           <nav>
             <ul>
               {tocHeadings.map((h) => (
@@ -140,6 +140,13 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         </div>
       </aside>
     )}
+
+    <RichLinks />
+
+    <dialog id="img-zoom" class="img-zoom" aria-label="Enlarged image">
+      <button type="button" class="img-zoom-close" aria-label="Close">×</button>
+      <img id="img-zoom-img" alt="" />
+    </dialog>
 </BaseLayout>
 
 <style>
@@ -223,26 +230,20 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
     border-bottom-width: 1px;
   }
 
-  .post-toc-label {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.75rem;
-    color: var(--color-link);
-    margin-bottom: 0.75rem;
-  }
-
+  /* Vertical rail on the left of the TOC. The active item darkens its segment. */
   .post-toc nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    border-left: 2px solid var(--color-rule);
   }
 
   .post-toc nav li {
-    margin: 0.25rem 0;
+    margin: 0;
   }
 
-  .post-toc .toc-depth-3 {
-    padding-left: 0.85rem;
+  .post-toc .toc-depth-3 a {
+    padding-left: 1.6rem;
     font-size: 0.8rem;
   }
 
@@ -250,9 +251,12 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
     color: var(--color-link);
     line-height: 1.4;
     display: block;
-    padding: 0.1rem 0;
+    padding: 0.3rem 0.5rem 0.3rem 0.85rem;
+    margin-left: -3px;
+    border-left: 4px solid transparent;
+    border-radius: 0 2px 2px 0;
     text-decoration: none;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
   }
 
   .post-toc nav a:hover {
@@ -264,25 +268,112 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
     color: var(--color-text);
     font-weight: 600;
     text-decoration: none;
+    border-left-color: var(--color-text);
+    background-color: var(--color-paper);
+  }
+
+  /* Math variables (P, P*, N) in a LaTeX-like serif italic */
+  .post-content :global(var) {
+    font-family: var(--font-math);
+    font-style: italic;
+    font-size: 1.08em;
+    padding: 0 0.04em;
+  }
+
+  /* Land headings below the fixed top fade when jumping to them */
+  .post-content :global(h2),
+  .post-content :global(h3) {
+    scroll-margin-top: 5rem;
+  }
+
+    /* Click-to-zoom for every image in the post body */
+  .post-content :global(img[data-zoomable]) {
+    cursor: zoom-in;
+  }
+
+  .img-zoom {
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    padding: 2rem;
+    border: none;
+    background: transparent;
+    box-sizing: border-box;
+    cursor: zoom-out;
+  }
+
+  .img-zoom[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .img-zoom::backdrop {
+    background: rgba(10, 8, 5, 0.88);
+  }
+
+  .img-zoom img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    margin: 0;
+    border: none;
+    border-radius: 2px;
+    /* Paper background so transparent diagrams stay readable on the dark backdrop */
+    background: var(--color-bg);
+  }
+
+  .img-zoom-close {
+    position: fixed;
+    top: 1rem;
+    right: 1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgba(237, 228, 207, 0.4);
+    border-radius: 50%;
+    background: transparent;
+    color: #ede4cf;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .img-zoom-close:focus {
+    outline: none;
+  }
+
+  .img-zoom-close:focus-visible {
+    outline: 2px solid #ede4cf;
+    outline-offset: 2px;
   }
 </style>
 
 <script>
-  const links = document.querySelectorAll<HTMLAnchorElement>(".post-content a[href]");
-  const origin = window.location.origin;
-  links.forEach((a) => {
-    const href = a.getAttribute("href") || "";
-    if (href.startsWith("#")) return;
-    const isInternal =
-      href.startsWith("/") ||
-      href.startsWith("./") ||
-      href.startsWith("../") ||
-      href.startsWith(origin);
-    if (!isInternal) {
-      a.setAttribute("target", "_blank");
-      a.setAttribute("rel", "noopener noreferrer");
-    }
-  });
+  // Click any image in the post to see it full screen.
+  const zoomDialog = document.getElementById("img-zoom") as HTMLDialogElement | null;
+  const zoomImg = document.getElementById("img-zoom-img") as HTMLImageElement | null;
+  if (zoomDialog && zoomImg) {
+    const images = document.querySelectorAll<HTMLImageElement>(
+      ".post-content img:not(.link-favicon)"
+    );
+    images.forEach((img) => {
+      if (img.closest("a")) return;
+      img.dataset.zoomable = "true";
+      img.addEventListener("click", () => {
+        zoomImg.src = img.dataset.zoomSrc || img.currentSrc || img.src;
+        zoomImg.alt = img.alt;
+        zoomDialog.showModal();
+      });
+    });
+    zoomDialog.addEventListener("click", () => zoomDialog.close());
+    zoomDialog.addEventListener("close", () => {
+      zoomImg.removeAttribute("src");
+    });
+  }
 
   const postTitleEl = document.getElementById("post-title");
   const tocTitleEl = document.getElementById("post-toc-title");
@@ -319,15 +410,73 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       if (active) active.classList.add("is-active");
     };
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        if (visible?.target?.id) setActive(visible.target.id);
-      },
-      { rootMargin: "0px 0px -75% 0px", threshold: 0 }
+    // Active section = the last heading above a line at 30% of the viewport.
+    // At the very bottom of the page the last heading wins, since short final
+    // sections can never scroll up to that line.
+    const activationOffset = () => window.innerHeight * 0.3;
+    const computeActive = () => {
+      const atBottom =
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (atBottom) return headings[headings.length - 1]?.id;
+      let current = headings[0]?.id;
+      for (const h of headings) {
+        if (h.getBoundingClientRect().top <= activationOffset()) current = h.id;
+        else break;
+      }
+      return current;
+    };
+
+    // While a TOC click scrolls the page, keep the clicked item active.
+    let lockedSlug: string | null = null;
+    let unlockTimer: number | undefined;
+    const unlock = () => {
+      lockedSlug = null;
+      window.clearTimeout(unlockTimer);
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        if (lockedSlug) return;
+        const slug = computeActive();
+        if (slug) setActive(slug);
+      });
+    };
+
+    tocLinks.forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const slug = link.dataset.tocLink || "";
+        const target = document.getElementById(slug);
+        if (!target) return;
+        event.preventDefault();
+        lockedSlug = slug;
+        setActive(slug);
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        history.replaceState(null, "", `#${slug}`);
+        window.clearTimeout(unlockTimer);
+        unlockTimer = window.setTimeout(unlock, 1500);
+      });
+    });
+
+    window.addEventListener("scrollend", () => {
+      if (!lockedSlug) return;
+      // Images above may have finished loading mid-scroll; land on the heading again.
+      const target = document.getElementById(lockedSlug);
+      if (target && Math.abs(target.getBoundingClientRect().top - parseFloat(getComputedStyle(target).scrollMarginTop || "0")) > 4) {
+        target.scrollIntoView({ behavior: "auto", block: "start" });
+      }
+      unlock();
+    });
+    // A user scroll (wheel, touch, keys) releases the lock at once.
+    ["wheel", "touchmove", "keydown"].forEach((type) =>
+      window.addEventListener(type, unlock, { passive: true })
     );
-    headings.forEach((h) => observer.observe(h));
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    onScroll();
   }
 </script>

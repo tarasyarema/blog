@@ -42,7 +42,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;600;700&family=Roboto+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap"
       rel="stylesheet"
     />
 
@@ -79,6 +79,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         --max-width: 900px;
         --font-display: "Funnel Display", sans-serif;
         --font-mono: "Roboto Mono", monospace;
+        --font-math: "STIX Two Text", "Iowan Old Style", Palatino, Georgia, serif;
       }
 
       :root[data-theme="dark"] {

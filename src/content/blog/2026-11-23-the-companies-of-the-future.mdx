@@ -1,0 +1,171 @@
+---
+title: The companies of the future
+subtitle: A mathematical take on why software will never die
+date: 2026-11-23
+tags: [ai, software, agent-swarm]
+image: /img/companies-of-the-future/hero.jpg
+---
+
+import { Image } from 'astro:assets';
+import BlogImage from '../../components/BlogImage.astro';
+import Statement from '../../components/Statement.astro';
+import Proof from '../../components/Proof.astro';
+import hero from '../../img/companies-of-the-future/hero.png';
+import fig1 from '../../img/companies-of-the-future/fig-1.png';
+import fig2 from '../../img/companies-of-the-future/fig-2.jpeg';
+import fig3 from '../../img/companies-of-the-future/fig-3.jpeg';
+
+<Image src={hero} alt="A dark monolith glowing against a golden sky over desert dunes" width={1200} data-zoom-src={hero.src} style="display: block; width: 100%; height: auto; margin: 0 0 2rem;" />
+
+For the last 6 months I've been thinking a lot about how companies will be run in the coming years. This post is an attempt to materialize those thoughts.
+
+To make it easier for the reader, I will describe these companies through their defining properties, as if they were a mathematical construct.
+
+Before getting into the details of it, I want to define what a (tech) company is.
+
+<Statement kind="Definition" n={1} name="Company">A **company** is a set of machines (software), AI and humans with the goals to achieve a purpose with biggest margin possible.</Statement>
+
+Due to my expertise and bias towards tech, I'll be focusing on companies operated by software machines, rather than mixed (hardware) machines. Yet most probably can be applied to those too.
+
+## Software, AI and Humans
+
+To be on the same page, I want to start by describing the essential properties of AI in comparison with software.
+
+**Properties of Software**
+
+1. It's deterministic, hence rigid;
+2. Each execution is cheap, close to free;
+3. Its speed can be controlled, by software and hardware;
+4. It's auditable, by checking its implementation (code).
+
+**Properties of AI**
+
+1. It's generative, hence malleable;
+2. It's strictly more expensive than software;
+3. Its speed cannot be controlled, it can be paid for;
+4. It's a black box, hence only input and output can be known for sure.
+
+You might or not agree with me on some of them, but I believe those should be reasonable enough. So let's add the missing part, humans.
+
+**Properties of Humans**
+
+1. They are extremely intelligent, hence malleable;
+2. They are costly, especially when their intelligence is high;
+3. Speed is bounded individually, and by [Brooks's law](https://en.wikipedia.org/wiki/Brooks's_law) in groups;
+4. Auditability is reduced as intelligence grows.
+
+What I want to surface here is how much similarity AI and humans have in comparison with software. This distinction is key, as here's my first property of the companies of the future.
+
+<Statement kind="Property" n={1} name="P1">The companies of the future will **execute** all their decisions with software.</Statement>
+
+Note the "execute" in it. Execution is very different from decision. Let's briefly get the Cambridge definition of both of them.
+
+<Statement kind="Definition" n={2} name="Execution">Is the act of doing or performing something, especially in a _planned way_.</Statement>
+
+<Statement kind="Definition" n={3} name="Decision">Is a choice that you make about something after _thinking about several possibilities_.</Statement>
+
+Going back to the initial properties I defined, we can see that the core difference is around predictability. **Software executes a predicted decision.**
+
+This allows us to define the next property.
+
+<Statement kind="Property" n={2} name="P2">All the **decisions** of a company of the future will be solely made by either a human or an AI.</Statement>
+
+This one is important, as it states a clear difference between what a decision and an algorithm is. An algorithm is a codified decision model written in software. We may refer to them as software or algorithm decisions, and we will reserve just "decisions" for the human or AI ones. Hence the "solely" in P2.
+
+<Statement kind="Definition" n={4} name="P">Take all the kinds of decisions a company faces, algorithm ones included. <var>P</var> is the share still made by a human or an AI. The rest, 1&nbsp;−&nbsp;<var>P</var>, is code.</Statement>
+
+<Statement kind="Lemma" n={1} name="P-bounded Decisions"><var>P</var> will decrease down to a floor <var>P\*</var>, set by the company complexity, where 0&nbsp;&lt;&nbsp;<var>P\*</var>&nbsp;&lt;&nbsp;1.</Statement>
+
+<Proof>This is trivial. Assume any goal (complexity) of a company and its motivation to maximize the margins. As software is cheaper and can be optimized, all the decisions mechanisms that can be materialized in code, will be. The floor is set at the point where codifying one more decision changes the goal of the company, cannot be done, or does not pay back. That floor is <var>P\*</var>. It cannot be 0, as it would mean that the company is just software, hence not a company. And it cannot be 1 as it would mean no software.</Proof>
+
+## Maximality of Code
+
+The P-bounded Decisions lemma opens the door to a natural question about how 1&nbsp;−&nbsp;<var>P</var> looks, and specifically on the process to find <var>P\*</var> itself.
+
+The answer to how to find <var>P\*</var> is already written in history. There are many examples, most notoriously starting during [industrialization](https://en.wikipedia.org/wiki/Industrialisation), and some specific examples like [Fordism](https://en.wikipedia.org/wiki/Fordism) or [The Toyota Way](https://en.wikipedia.org/wiki/The_Toyota_Way). What do they have in common?
+
+- Process is the thing being designed;
+- Standardization comes first;
+- Tacit knowledge becomes explicit;
+- Flow is the target.
+
+Now ask yourself, what does a company (in current times) do as it grows (in size, headcount or operations)? Some variations of this.
+
+In particular, how does tech companies tackle it? With software. Let's rewrite those in tech terms.
+
+- Delivery pipeline of the product: software factories, agile, CRMs;
+- Stack unification: frameworks, Notion, Linear;
+- Codification of knowledge: algorithms, data models, knowledge bases;
+- Observability: DORA, architecture engineering, data-driven.
+
+I think we can all agree on this. I've seen this myself when I worked at Capchase, and I've seen in the companies of friends that grew.
+
+<BlogImage src={fig1} alt="Diagram: Market, Pipeline, Vision, Idea and Product connected in a loop, with a human on every edge" caption="Figure 1. How an early stage company works, mostly humans in the edges." />
+
+When a company is starting a lot of the execution happens by a human. E.g. filling spreadsheets, checking every customer support ticket, replying to emails.
+
+<BlogImage src={fig2} alt="Diagram: Sales, Business, Product and Infra groups linked by code, with humans as operators inside each group" caption="Figure 2. Later stage company. Automation, code in the edges, humans as operators." />
+
+As you grow, you start adding automation and standarizing how you do things. E.g. adding a CRM (software), hiring an SRE to scale the infra (human), etc. The level of automation (in the optimal company) grows at the same pace as the amount of predictable execution grows.
+
+In the companies of the future we need to take into account a new variable in its growth: **AI adoption**.
+
+When AI comes into play, the complexity of company spikes, as it's equivalent on adding a substantial group of humans to the company.
+
+<Statement kind="Axiom" n={1} name="Growth">A successful company keeps facing new kinds of decisions. More customers on the same product is the same decision repeated, and software already scales that for free. New products, new markets and new edge cases are new decisions.</Statement>
+
+<Statement kind="Lemma" n={2} name="More AI, more Code">A positive delta in AI-adoption forces a positive delta in automation.</Statement>
+
+<BlogImage src={fig3} alt="Chart: complexity, automation and manual work over growth, comparing the present and the future" caption="Figure 3. Complexity and Automation over growth. A present and future view. Manual work is either raw human, or AI-augmented human work." />
+
+<Proof>Growth in current companies implied a spike in manual work which could be distilled into a set of core decisions, and automations. In a company of the future, growth is directly dependent on AI-adoption, as AI is cheaper than a human and you only hire when a decision can only be made by a human. So the new work lands on AI first. And because that same AI makes writing and maintaining code almost free, distilling it pays back much sooner than it did with humans. Hence, as per margin maximality, any increase in AI-adoption will lead to an increase in automation.</Proof>
+
+This is a really important lemma. In fact, it's the one that few people see, and only a few are betting on.
+
+People think AI adoption is meant to augment or improve human decisions. But for anyone that used AI enough in November of 2026, they know that AI should be used to make its own decisions. A hint of this is why System One models are getting the press they are getting.
+
+<Statement kind="Conjecture" n={1} name="Eventual Nature of Work">The difference between an AI decision and a human one will be 0.</Statement>
+
+<Proof label="Why I believe it" qed={false}>A decision is defined as a choice in a setup with multiple possibilities. In a company of the future, the sole purpose of a decision is to select one path from state A to B. Assuming the decision cannot be codified, there are only two scenarios. If the perplexity of the model in the context of that decision is low enough, it will take it. If not, a human operator will. For the company the decider is irrelevant, only reaching B matters.</Proof>
+
+Note that I'm stretching perplexity here. OpenAI's "[Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence/)" uses it as one number per model. I use it per decision: how many options the model is still hesitating between.
+
+This conjecture states something powerful: the companies of the future will always route decisions to AI based on the model perplexity. This yields a third property.
+
+<Statement kind="Property" n={3} name="P3">A company of the future will increase the AI-to-human decision making ratio as model perplexity decreases.</Statement>
+
+In simple terms, as the labs ship new better models (closed or open) the company will automatically benefit from it.
+
+To close this section, we will finally answer its title.
+
+<Statement kind="Theorem" n={1} name="Maximality of Code">Code will always grow, even after <var>P\*</var> is achieved.</Statement>
+
+<Proof>Let <var>N</var> be the number of kinds of decisions the company faces. By definition, code covers (1&nbsp;−&nbsp;<var>P</var>)·<var>N</var> of them. By the Growth axiom <var>N</var> keeps growing, and each new kind of decision starts in <var>P</var>, as nobody has codified it yet. By the More AI, more Code lemma it gets distilled, which brings <var>P</var> back down towards <var>P\*</var>. So even with <var>P</var> sitting at <var>P\*</var>, code covers (1&nbsp;−&nbsp;<var>P\*</var>)·<var>N</var>, and <var>N</var> grows.</Proof>
+
+I hope that this theorem helps understand what 1&nbsp;−&nbsp;<var>P</var> looks like: _just code_. And it holds even if the labs hit the brakes. [@merettm](https://x.com/merettm) proposed this week a shared limit on perplexity. If that happens, P3 freezes. The theorem doesn't care.
+
+## The conjecture of the future
+
+So far we've talked about automation, AI-adoption and the nature of how decision will be made in the companies of the future.
+
+<Statement kind="Conjecture" n={2} name="Software's Immortality">The success of a company of the future will not be defined by its spend on AI decisions, but rather on AI spend for automation.</Statement>
+
+That's it. My bet is that software will never die. SaaS might get reduced, or not, depending on how useful it might be the companies of the future in their automation needs.
+
+There's some hints of this being true. For example, the reason why software factories are that hot now is specially for this reason. A factory (going back to Fordism) is way to optimize a line of work, by putting AI and humans to work. At the same time, company brains are software algorithms that aim to reduce the scope of AI (and sometimes human) decisions.
+
+### Open questions
+
+1. What is <var>P\*</var> for a given company? Is there a formula, or you can only find it by running the company?
+2. Will the human share of <var>P</var> go to 0? _Hope_ not.
+3. As inference keeps getting cheaper. Is there a point where calling the model every time beats writing the code? I bet no. Prove me wrong.
+
+## Final thoughts
+
+As I stated at the start, this is just an attempt to synthesize my current vision on the future. This vision is what drives all the work [@ecura](https://x.com/ecura) and I have been doing for the past year.
+
+We materialize all our learnings into a single open source project, that we believe will enable a lot of new (and old) companies to prove the conjecture right, and become the companies of the future.
+
+The project is [agent-swarm.dev](https://agent-swarm.dev/).
+
+We bet on it, will you?

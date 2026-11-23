@@ -1,0 +1,60 @@
+---
+// A proof block: "Proof. text ∎". Right after a <Statement> it attaches to the
+// bottom of that card. On its own it is a lighter card.
+// Put the proof text on the same line as the tags so MDX keeps it inline.
+interface Props {
+  label?: string;
+  qed?: boolean;
+}
+
+const { label = "Proof", qed = true } = Astro.props;
+---
+
+<div class="proof">
+  <p>
+    <em class="proof-label">{label}.</em>{" "}<slot />{qed && <span class="proof-qed" aria-label="end of proof">∎</span>}
+  </p>
+</div>
+
+<style>
+  .proof {
+    margin: 1.75rem 0;
+    padding: 0.85rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 0.95em;
+    line-height: 1.7;
+    color: var(--color-text-soft);
+  }
+
+  /* Attached to the statement card right above it */
+  :global(.statement) + .proof {
+    margin-top: 0;
+    border-top: 1px dashed var(--color-border);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .proof p {
+    margin: 0;
+  }
+
+  .proof-label {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .proof-qed {
+    float: right;
+    margin-left: 1rem;
+    color: var(--color-text);
+  }
+
+  /* Keep the float inside the block */
+  .proof p::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+</style>

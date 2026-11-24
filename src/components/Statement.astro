@@ -5,15 +5,17 @@
 // A <Proof> placed right after it attaches to the bottom of the card.
 // Put the statement text on the same line as the tags so MDX keeps it inline.
 interface Props {
-  kind: "Definition" | "Lemma" | "Theorem" | "Conjecture" | "Axiom" | "Property";
+  kind: "Definition" | "Lemma" | "Theorem" | "Conjecture" | "Axiom" | "Property" | "Example";
   n: number | string;
   name?: string;
 }
 
 const { kind, n, name } = Astro.props;
+// Anchor for <Ref to="lemma-1">, e.g. "lemma-1", "property-2".
+const id = `${kind.toLowerCase()}-${n}`;
 ---
 
-<div class="statement">
+<div class="statement" id={id} data-statement-label={`${kind} ${n}${name ? ` · ${name}` : ""}`}>
   <div class="statement-label">
     <span class="statement-kind">{kind} {n}</span>{name && <span class="statement-name"> · {name}</span>}
   </div>
@@ -22,6 +24,7 @@ const { kind, n, name } = Astro.props;
 
 <style>
   .statement {
+    scroll-margin-top: 5rem;
     margin: 1.75rem 0;
     padding: 0.9rem 1.25rem 1rem;
     background-color: var(--color-paper);
@@ -34,6 +37,21 @@ const { kind, n, name } = Astro.props;
     margin-bottom: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  /* Brief highlight after jumping here from a <Ref> */
+  .statement:global(.is-flash) {
+    animation: statement-flash 1.6s ease;
+  }
+
+  @keyframes statement-flash {
+    0%, 30% {
+      border-color: var(--color-text);
+      box-shadow: 0 0 0 3px var(--color-border);
+    }
+    100% {
+      box-shadow: 0 0 0 3px transparent;
+    }
   }
 
   .statement-label {

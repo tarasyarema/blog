@@ -1,0 +1,304 @@
+---
+// A mention of a numbered statement, e.g. <Ref to="lemma-1">P-bounded Decisions lemma</Ref>.
+// Mouse: hover or focus shows the statement in a popover, click jumps to it.
+// Touch: tap shows the popover with a "Go to" link, so a tap never jumps away by surprise.
+// After a jump, a "Back to where you were" pill returns the reader to the mention.
+// `to` is the statement id: the kind in lower case and its number ("property-3").
+interface Props {
+  to: string;
+}
+
+const { to } = Astro.props;
+---
+
+<a href={`#${to}`} class="stmt-ref" data-ref={to}><slot /></a>
+
+<style is:global>
+  /* Dotted underline drawn as a row of dots, so it stays crisp and visible */
+  .post-content a.stmt-ref,
+  a.stmt-ref {
+    color: var(--color-text);
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0 0.1em 0.12em;
+    margin: 0 -0.1em;
+    border-radius: 3px;
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1.3px);
+    background-size: 5px 3px;
+    background-repeat: repeat-x;
+    background-position: 0 100%;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .post-content a.stmt-ref:hover,
+  .post-content a.stmt-ref:focus-visible {
+    color: var(--color-text);
+    text-decoration: none;
+    background-color: var(--color-paper);
+  }
+
+  .stmt-popover {
+    /* Created by script, so the layout's scoped box-sizing reset does not reach it */
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 60;
+    width: min(360px, calc(100vw - 2rem));
+    padding: 0.75rem 1rem 0.85rem;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--color-text);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+  }
+
+  .stmt-popover.is-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .stmt-popover-label {
+    margin-bottom: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-link);
+  }
+
+  .stmt-popover-body {
+    margin: 0;
+  }
+
+  /* Touch: the popover takes taps and shows a link to the statement */
+  .stmt-popover.is-interactive {
+    pointer-events: auto;
+  }
+
+  .stmt-popover-go {
+    display: none;
+    margin-top: 0.65rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 999px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .stmt-popover.is-interactive .stmt-popover-go {
+    display: inline-flex;
+  }
+
+  /* "Back to where you were" after a jump to a statement */
+  .stmt-return {
+    box-sizing: border-box;
+    position: fixed;
+    left: 50%;
+    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: calc(100vw - 8rem);
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 999px;
+    background-color: var(--color-paper);
+    color: var(--color-text);
+    box-shadow: 0 1px 0 var(--color-rule), 0 8px 24px rgba(26, 22, 17, 0.16);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    white-space: nowrap;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 12px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .stmt-return.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+  }
+
+  .stmt-return:hover {
+    background-color: var(--color-code-bg);
+  }
+
+  /* Brief highlight on the mention after coming back to it */
+  a.stmt-ref.is-flash {
+    animation: stmt-ref-flash 1.4s ease;
+  }
+
+  @keyframes stmt-ref-flash {
+    0%, 35% {
+      background-color: var(--color-border);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+</style>
+
+<script>
+  const refs = document.querySelectorAll<HTMLAnchorElement>("a.stmt-ref[data-ref]");
+  if (refs.length > 0) {
+    const isTouch = window.matchMedia("(hover: none)").matches;
+
+    const popover = document.createElement("div");
+    popover.className = "stmt-popover";
+    popover.setAttribute("role", "tooltip");
+    popover.id = "stmt-popover";
+    document.body.appendChild(popover);
+
+    const returnPill = document.createElement("button");
+    returnPill.type = "button";
+    returnPill.className = "stmt-return";
+    returnPill.innerHTML = '<span aria-hidden="true">↩</span> Back to where you were';
+    document.body.appendChild(returnPill);
+
+    let showTimer: number | undefined;
+    let openRef: HTMLAnchorElement | null = null;
+    let returnTo: HTMLAnchorElement | null = null;
+    let jumping = false;
+
+    const hide = () => {
+      window.clearTimeout(showTimer);
+      popover.classList.remove("is-open", "is-interactive");
+      openRef = null;
+    };
+
+    const show = (ref: HTMLAnchorElement, interactive: boolean) => {
+      const target = document.getElementById(ref.dataset.ref || "");
+      const body = target?.querySelector(".statement-body");
+      if (!target || !body) return;
+      const name = target.dataset.statementLabel || "";
+
+      popover.innerHTML = "";
+      const label = document.createElement("div");
+      label.className = "stmt-popover-label";
+      label.textContent = name;
+      const text = document.createElement("p");
+      text.className = "stmt-popover-body";
+      text.innerHTML = body.innerHTML;
+      popover.append(label, text);
+
+      if (interactive) {
+        const above = target.getBoundingClientRect().top < ref.getBoundingClientRect().top;
+        const go = document.createElement("button");
+        go.type = "button";
+        go.className = "stmt-popover-go";
+        go.textContent = `Go to ${name.split(" · ")[0]} ${above ? "↑" : "↓"}`;
+        go.addEventListener("click", () => jump(ref));
+        popover.append(go);
+      }
+
+      // Measure, then place above the mention, or below when there is no room.
+      popover.classList.toggle("is-interactive", interactive);
+      popover.style.left = "0px";
+      popover.style.top = "0px";
+      const rect = ref.getBoundingClientRect();
+      const box = popover.getBoundingClientRect();
+      // Keep the same side gap as the page text on small screens.
+      const margin = Math.min(16, Math.max(8, (window.innerWidth - box.width) / 2));
+      let left = rect.left + rect.width / 2 - box.width / 2;
+      left = Math.max(margin, Math.min(left, window.innerWidth - box.width - margin));
+      let top = rect.top - box.height - margin;
+      if (top < 80) top = rect.bottom + margin;
+      popover.style.left = `${left + window.scrollX}px`;
+      popover.style.top = `${top + window.scrollY}px`;
+      ref.setAttribute("aria-describedby", popover.id);
+      popover.classList.add("is-open");
+      openRef = ref;
+    };
+
+    const flash = (el: HTMLElement, className: string, delay: number, duration: number) => {
+      el.classList.remove(className);
+      window.setTimeout(() => {
+        void el.offsetWidth;
+        el.classList.add(className);
+      }, delay);
+      window.setTimeout(() => el.classList.remove(className), delay + duration);
+    };
+
+    // Scroll to the statement, remember the mention, offer the way back.
+    const jump = (ref: HTMLAnchorElement) => {
+      const target = document.getElementById(ref.dataset.ref || "");
+      if (!target) return;
+      hide();
+      returnTo = ref;
+      jumping = true;
+      returnPill.classList.add("is-visible");
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      history.replaceState(null, "", `#${target.id}`);
+      flash(target, "is-flash", 350, 1850);
+      window.setTimeout(() => (jumping = false), 900);
+    };
+
+    returnPill.addEventListener("click", () => {
+      const ref = returnTo;
+      returnPill.classList.remove("is-visible");
+      returnTo = null;
+      if (!ref) return;
+      ref.scrollIntoView({ behavior: "smooth", block: "center" });
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+      flash(ref, "is-flash", 350, 1400);
+    });
+
+    refs.forEach((ref) => {
+      if (!isTouch) {
+        ref.addEventListener("mouseenter", () => {
+          window.clearTimeout(showTimer);
+          showTimer = window.setTimeout(() => show(ref, false), 120);
+        });
+        ref.addEventListener("mouseleave", hide);
+        ref.addEventListener("focus", () => show(ref, false));
+        ref.addEventListener("blur", hide);
+      }
+
+      ref.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (isTouch) {
+          // First tap shows the statement with a "Go to" link. A second tap on the same mention jumps.
+          if (openRef === ref) jump(ref);
+          else show(ref, true);
+          return;
+        }
+        jump(ref);
+      });
+    });
+
+    // Touch: a tap outside the popover closes it.
+    document.addEventListener("click", (event) => {
+      const node = event.target as Node;
+      if (!openRef || popover.contains(node) || openRef.contains(node)) return;
+      hide();
+    });
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!isTouch) hide();
+        // Coming back to the mention by hand also dismisses the pill.
+        if (!jumping && returnTo) {
+          const rect = returnTo.getBoundingClientRect();
+          if (rect.top > 0 && rect.bottom < window.innerHeight) {
+            returnPill.classList.remove("is-visible");
+            returnTo = null;
+          }
+        }
+      },
+      { passive: true }
+    );
+  }
+</script>

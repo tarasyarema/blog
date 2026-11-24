@@ -6,16 +6,17 @@ tags: [ai, software, agent-swarm]
 image: /img/companies-of-the-future/hero.jpg
 ---
 
-import { Image } from 'astro:assets';
+import Hero from '../../components/Hero.astro';
 import BlogImage from '../../components/BlogImage.astro';
 import Statement from '../../components/Statement.astro';
 import Proof from '../../components/Proof.astro';
+import Ref from '../../components/Ref.astro';
 import hero from '../../img/companies-of-the-future/hero.png';
 import fig1 from '../../img/companies-of-the-future/fig-1.png';
 import fig2 from '../../img/companies-of-the-future/fig-2.jpeg';
 import fig3 from '../../img/companies-of-the-future/fig-3.jpeg';
 
-<Image src={hero} alt="A dark monolith glowing against a golden sky over desert dunes" width={1200} data-zoom-src={hero.src} style="display: block; width: 100%; height: auto; margin: 0 0 2rem;" />
+<Hero src={hero} alt="A dark monolith glowing against a golden sky over desert dunes" />
 
 For the last 6 months I've been thinking a lot about how companies will be run in the coming years. This post is an attempt to materialize those thoughts.
 
@@ -70,7 +71,7 @@ This allows us to define the next property.
 
 <Statement kind="Property" n={2} name="P2">All the **decisions** of a company of the future will be solely made by either a human or an AI.</Statement>
 
-This one is important, as it states a clear difference between what a decision and an algorithm is. An algorithm is a codified decision model written in software. We may refer to them as software or algorithm decisions, and we will reserve just "decisions" for the human or AI ones. Hence the "solely" in P2.
+This one is important, as it states a clear difference between what a decision and an algorithm is. An algorithm is a codified decision model written in software. We may refer to them as software or algorithm decisions, and we will reserve just "decisions" for the human or AI ones. Hence the "solely" in <Ref to="property-2">P2</Ref>.
 
 <Statement kind="Definition" n={4} name="P">Take all the kinds of decisions a company faces, algorithm ones included. <var>P</var> is the share still made by a human or an AI. The rest, 1&nbsp;−&nbsp;<var>P</var>, is code.</Statement>
 
@@ -80,7 +81,7 @@ This one is important, as it states a clear difference between what a decision a
 
 ## Maximality of Code
 
-The P-bounded Decisions lemma opens the door to a natural question about how 1&nbsp;−&nbsp;<var>P</var> looks, and specifically on the process to find <var>P\*</var> itself.
+The <Ref to="lemma-1">P-bounded Decisions lemma</Ref> opens the door to a natural question about how 1&nbsp;−&nbsp;<var>P</var> looks, and specifically on the process to find <var>P\*</var> itself.
 
 The answer to how to find <var>P\*</var> is already written in history. There are many examples, most notoriously starting during [industrialization](https://en.wikipedia.org/wiki/Industrialisation), and some specific examples like [Fordism](https://en.wikipedia.org/wiki/Fordism) or [The Toyota Way](https://en.wikipedia.org/wiki/The_Toyota_Way). What do they have in common?
 
@@ -120,7 +121,7 @@ When AI comes into play, the complexity of company spikes, as it's equivalent on
 
 <Proof>Growth in current companies implied a spike in manual work which could be distilled into a set of core decisions, and automations. In a company of the future, growth is directly dependent on AI-adoption, as AI is cheaper than a human and you only hire when a decision can only be made by a human. So the new work lands on AI first. And because that same AI makes writing and maintaining code almost free, distilling it pays back much sooner than it did with humans. Hence, as per margin maximality, any increase in AI-adoption will lead to an increase in automation.</Proof>
 
-This is a really important lemma. In fact, it's the one that few people see, and only a few are betting on.
+This is a really important <Ref to="lemma-2">lemma</Ref>. In fact, it's the one that few people see, and only a few are betting on.
 
 People think AI adoption is meant to augment or improve human decisions. But for anyone that used AI enough in November of 2026, they know that AI should be used to make its own decisions. A hint of this is why System One models are getting the press they are getting.
 
@@ -130,19 +131,19 @@ People think AI adoption is meant to augment or improve human decisions. But for
 
 Note that I'm stretching perplexity here. OpenAI's "[Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence/)" uses it as one number per model. I use it per decision: how many options the model is still hesitating between.
 
-This conjecture states something powerful: the companies of the future will always route decisions to AI based on the model perplexity. This yields a third property.
+<Ref to="conjecture-1">This conjecture</Ref> states something powerful: the companies of the future will always route decisions to AI based on the model perplexity. This yields a third property.
 
 <Statement kind="Property" n={3} name="P3">A company of the future will increase the AI-to-human decision making ratio as model perplexity decreases.</Statement>
 
 In simple terms, as the labs ship new better models (closed or open) the company will automatically benefit from it.
 
-To close this section, we will finally answer its title.
+To close this section, we will finally answer to its title.
 
 <Statement kind="Theorem" n={1} name="Maximality of Code">Code will always grow, even after <var>P\*</var> is achieved.</Statement>
 
-<Proof>Let <var>N</var> be the number of kinds of decisions the company faces. By definition, code covers (1&nbsp;−&nbsp;<var>P</var>)·<var>N</var> of them. By the Growth axiom <var>N</var> keeps growing, and each new kind of decision starts in <var>P</var>, as nobody has codified it yet. By the More AI, more Code lemma it gets distilled, which brings <var>P</var> back down towards <var>P\*</var>. So even with <var>P</var> sitting at <var>P\*</var>, code covers (1&nbsp;−&nbsp;<var>P\*</var>)·<var>N</var>, and <var>N</var> grows.</Proof>
+<Proof>Let <var>N</var> be the number of kinds of decisions the company faces. By definition, code covers (1&nbsp;−&nbsp;<var>P</var>)·<var>N</var> of them. By the <Ref to="axiom-1">Growth axiom</Ref> <var>N</var> keeps growing, and each new kind of decision starts in <var>P</var>, as nobody has codified it yet. By the <Ref to="lemma-2">More AI, more Code lemma</Ref> it gets distilled, which brings <var>P</var> back down towards <var>P\*</var>. So even with <var>P</var> sitting at <var>P\*</var>, code covers (1&nbsp;−&nbsp;<var>P\*</var>)·<var>N</var>, and <var>N</var> grows.</Proof>
 
-I hope that this theorem helps understand what 1&nbsp;−&nbsp;<var>P</var> looks like: _just code_. And it holds even if the labs hit the brakes. [@merettm](https://x.com/merettm) proposed this week a shared limit on perplexity. If that happens, P3 freezes. The theorem doesn't care.
+I hope that this <Ref to="theorem-1">theorem</Ref> helps understand what 1&nbsp;−&nbsp;<var>P</var> looks like: _just code_. And it holds even if the labs hit the brakes. [@merettm](https://x.com/merettm) proposed this week a shared limit on perplexity. If that happens, <Ref to="property-3">P3</Ref> freezes. The <Ref to="theorem-1">theorem</Ref> doesn't care.
 
 ## The conjecture of the future
 
@@ -162,9 +163,9 @@ There's some hints of this being true. For example, the reason why software fact
 
 ## Final thoughts
 
-As I stated at the start, this is just an attempt to synthesize my current vision on the future. This vision is what drives all the work [@ecura](https://x.com/ecura) and I have been doing for the past year.
+As I stated at the start, this is just a try to synthesize my current vision on the future. This vision is what drives all the work [@ecura](https://x.com/ecura) and I have been doing for the past year.
 
-We materialize all our learnings into a single open source project, that we believe will enable a lot of new (and old) companies to prove the conjecture right, and become the companies of the future.
+We materialize all our learnings into a single open source project, that we believe will enable a lot of new (and old) companies to prove the <Ref to="conjecture-2">conjecture</Ref> right, and become the companies of the future.
 
 The project is [agent-swarm.dev](https://agent-swarm.dev/).
 

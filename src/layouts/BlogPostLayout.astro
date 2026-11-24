@@ -141,6 +141,43 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       </aside>
     )}
 
+    {tocHeadings.length > 0 && (
+      <button
+        slot="floating"
+        id="toc-toggle"
+        class="fab-item toc-toggle"
+        type="button"
+        role="menuitem"
+        tabindex="-1"
+        aria-controls="toc-sheet"
+      >
+        <span class="fab-item-icon" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" /></svg>
+        </span>
+        Contents
+      </button>
+    )}
+
+    {tocHeadings.length > 0 && (
+      <dialog id="toc-sheet" class="toc-sheet" aria-label="Table of contents">
+        <div class="toc-sheet-inner">
+          <div class="toc-sheet-head">
+            <span class="toc-sheet-title">{title}</span>
+            <button type="button" class="toc-sheet-close" aria-label="Close">×</button>
+          </div>
+          <nav>
+            <ul>
+              {tocHeadings.map((h) => (
+                <li class={`toc-depth-${h.depth}`}>
+                  <a href={`#${h.slug}`} data-toc-link={h.slug}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </dialog>
+    )}
+
     <RichLinks />
 
     <dialog id="img-zoom" class="img-zoom" aria-label="Enlarged image">
@@ -280,6 +317,96 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
     padding: 0 0.04em;
   }
 
+  /* Mobile TOC: a floating button opens a bottom sheet. Hidden where the side TOC shows. */
+  @media (min-width: 1180px) {
+    .toc-toggle {
+      display: none !important;
+    }
+  }
+
+  .toc-sheet {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 75vh;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-top: 1px solid var(--color-rule);
+    border-radius: 12px 12px 0 0;
+    background-color: var(--color-paper);
+    color: var(--color-text);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .toc-sheet::backdrop {
+    background: rgba(10, 8, 5, 0.45);
+  }
+
+  .toc-sheet-inner {
+    padding: 1rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
+    max-height: 75vh;
+    overflow-y: auto;
+  }
+
+  .toc-sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .toc-sheet-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .toc-sheet-close {
+    flex: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .toc-sheet ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--color-rule);
+  }
+
+  .toc-sheet a {
+    display: block;
+    padding: 0.6rem 0.5rem 0.6rem 0.9rem;
+    margin-left: -3px;
+    border-left: 4px solid transparent;
+    color: var(--color-link);
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  .toc-sheet .toc-depth-3 a {
+    padding-left: 1.75rem;
+    font-size: 0.92rem;
+  }
+
+  .toc-sheet a.is-active {
+    color: var(--color-text);
+    font-weight: 600;
+    border-left-color: var(--color-text);
+    background-color: var(--color-bg);
+  }
+
   /* Land headings below the fixed top fade when jumping to them */
   .post-content :global(h2),
   .post-content :global(h3) {
@@ -361,7 +488,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
       ".post-content img:not(.link-favicon)"
     );
     images.forEach((img) => {
-      if (img.closest("a")) return;
+      if (img.closest("a") || img.closest("[data-no-zoom]")) return;
       img.dataset.zoomable = "true";
       img.addEventListener("click", () => {
         zoomImg.src = img.dataset.zoomSrc || img.currentSrc || img.src;
@@ -394,21 +521,27 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
   }
 
   const tocLinks = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>(".post-toc a[data-toc-link]")
+    document.querySelectorAll<HTMLAnchorElement>(".post-toc a[data-toc-link], .toc-sheet a[data-toc-link]")
   );
   if (tocLinks.length > 0) {
-    const linkBySlug = new Map(
-      tocLinks.map((l) => [l.dataset.tocLink || "", l] as const)
-    );
-    const headings = tocLinks
-      .map((l) => document.getElementById(l.dataset.tocLink || ""))
+    // The desktop TOC and the mobile sheet list the same headings.
+    const slugs = Array.from(new Set(tocLinks.map((l) => l.dataset.tocLink || "")));
+    const headings = slugs
+      .map((slug) => document.getElementById(slug))
       .filter((el): el is HTMLElement => !!el);
 
     const setActive = (slug: string) => {
-      tocLinks.forEach((l) => l.classList.remove("is-active"));
-      const active = linkBySlug.get(slug);
-      if (active) active.classList.add("is-active");
+      tocLinks.forEach((l) => l.classList.toggle("is-active", l.dataset.tocLink === slug));
     };
+
+    const sheet = document.getElementById("toc-sheet") as HTMLDialogElement | null;
+    const sheetToggle = document.getElementById("toc-toggle");
+    sheetToggle?.addEventListener("click", () => sheet?.showModal());
+    sheet?.querySelector(".toc-sheet-close")?.addEventListener("click", () => sheet.close());
+    // A tap on the backdrop (outside the panel) closes the sheet.
+    sheet?.addEventListener("click", (event) => {
+      if (event.target === sheet) sheet.close();
+    });
 
     // Active section = the last heading above a line at 30% of the viewport.
     // At the very bottom of the page the last heading wins, since short final
@@ -452,6 +585,7 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         const target = document.getElementById(slug);
         if (!target) return;
         event.preventDefault();
+        if (sheet?.open) sheet.close();
         lockedSlug = slug;
         setActive(slug);
         target.scrollIntoView({ behavior: "smooth", block: "start" });

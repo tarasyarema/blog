@@ -13,7 +13,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
 
     <!-- Open Graph Tags -->
@@ -109,6 +109,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       }
 
       body {
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
         font-family: var(--font-display);
         background-color: var(--color-bg);
         color: var(--color-text);
@@ -212,11 +214,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         );
       }
 
-      /* Floating buttons (theme + back-to-top) */
+      /* Desktop floating buttons (back to top + theme) */
       .floating-stack {
         position: fixed;
-        bottom: 1.5rem;
-        right: 1.5rem;
+        bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+        right: calc(1.5rem + env(safe-area-inset-right, 0px));
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
@@ -257,13 +259,171 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         transform: translateY(0);
       }
 
+      /* Below 1180px (no side TOC) the morphing menu replaces the round buttons */
+      @media (max-width: 1179px) {
+        .floating-stack {
+          display: none;
+        }
+      }
+
+      @media (min-width: 1180px) {
+        .fab {
+          display: none !important;
+        }
+      }
+
+      /* One floating button that morphs into a small menu (contents, back to top, theme) */
+      .fab {
+        position: fixed;
+        /* Stay clear of the iPhone home indicator and the rounded screen corners */
+        bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+        right: calc(1.5rem + env(safe-area-inset-right, 0px));
+        z-index: 100;
+        width: 2.75rem;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid var(--color-rule);
+        border-radius: 1.375rem;
+        background-color: var(--color-paper);
+        color: var(--color-text);
+        box-shadow: 0 1px 0 var(--color-rule), 0 2px 10px rgba(26, 22, 17, 0.1);
+        transition:
+          width 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+          border-radius 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+          box-shadow 0.28s ease;
+      }
+
+      .fab.is-open {
+        width: 12.5rem;
+        border-radius: 14px;
+        box-shadow: 0 1px 0 var(--color-rule), 0 12px 32px rgba(26, 22, 17, 0.18);
+      }
+
+      /* The menu grows in height from 0 with the grid-rows trick */
+      .fab-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .fab.is-open .fab-panel {
+        grid-template-rows: 1fr;
+      }
+
+      .fab-items {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        opacity: 0;
+        transition: opacity 0.15s ease, padding 0.28s ease;
+      }
+
+      .fab.is-open .fab-items {
+        padding: 0.35rem 0.35rem 0;
+        opacity: 1;
+        transition: opacity 0.2s ease 0.08s, padding 0.28s ease;
+      }
+
+      :global(.fab-item) {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        width: 100%;
+        padding: 0.6rem 0.65rem;
+        border: none;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--color-text);
+        font-family: var(--font-display);
+        font-size: 0.92rem;
+        line-height: 1.2;
+        text-align: left;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+
+      :global(.fab-item:hover),
+      :global(.fab-item:focus-visible) {
+        background-color: var(--color-code-bg);
+        outline: none;
+      }
+
+      :global(.fab-item-icon) {
+        width: 1.1rem;
+        flex: none;
+        display: inline-flex;
+        justify-content: center;
+      }
+
+      .fab-trigger {
+        flex: none;
+        align-self: flex-end;
+        width: 2.75rem;
+        height: 2.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: transparent;
+        color: var(--color-text);
+        cursor: pointer;
+      }
+
+      .fab-trigger-icon {
+        position: relative;
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Three dots that turn into a cross */
+      .fab-trigger-icon span {
+        position: absolute;
+        top: 7px;
+        width: 4px;
+        height: 2px;
+        border-radius: 1px;
+        background-color: currentColor;
+        transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.28s ease, left 0.28s ease, opacity 0.2s ease;
+      }
+
+      .fab-trigger-icon span:nth-child(1) { left: 0; }
+      .fab-trigger-icon span:nth-child(2) { left: 6px; }
+      .fab-trigger-icon span:nth-child(3) { left: 12px; }
+
+      .fab.is-open .fab-trigger-icon span:nth-child(1) {
+        left: 0;
+        width: 16px;
+        transform: rotate(45deg);
+      }
+
+      .fab.is-open .fab-trigger-icon span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .fab.is-open .fab-trigger-icon span:nth-child(3) {
+        left: 0;
+        width: 16px;
+        transform: rotate(-45deg);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fab,
+        .fab-panel,
+        .fab-items,
+        .fab-trigger-icon span {
+          transition: none !important;
+        }
+      }
+
       .theme-icon-dark,
       :root[data-theme="dark"] .theme-icon-light {
         display: none;
       }
 
       :root[data-theme="dark"] .theme-icon-dark {
-        display: inline;
+        display: inline-flex;
       }
     </style>
 
@@ -331,53 +491,99 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <div class="page-fade page-fade--bottom"></div>
 
+    <!-- Desktop: two round buttons. Below 1180px the morphing menu (.fab) replaces them. -->
     <div class="floating-stack">
-      <button
-        id="back-to-top"
-        class="floating-btn"
-        type="button"
-        aria-label="Back to top"
-        title="Back to top"
-      >
-        ↑
-      </button>
-      <button
-        id="theme-toggle"
-        class="floating-btn"
-        type="button"
-        aria-label="Toggle theme"
-        title="Toggle theme"
-      >
+      <button id="back-to-top" class="floating-btn" data-action="top" type="button" aria-label="Back to top" title="Back to top">↑</button>
+      <button id="theme-toggle" class="floating-btn" data-action="theme" type="button" aria-label="Toggle theme" title="Toggle theme">
         <span class="theme-icon-light" aria-hidden="true">☾</span>
         <span class="theme-icon-dark" aria-hidden="true">☀</span>
       </button>
     </div>
 
+    <div class="fab" id="fab">
+      <div class="fab-panel" id="fab-panel">
+        <div class="fab-items" role="menu" aria-label="Page actions">
+          <slot name="floating" />
+          <button class="fab-item" data-action="top" type="button" role="menuitem" tabindex="-1">
+            <span class="fab-item-icon" aria-hidden="true">↑</span> Back to top
+          </button>
+          <button class="fab-item" data-action="theme" type="button" role="menuitem" tabindex="-1">
+            <span class="theme-icon-light"><span class="fab-item-icon" aria-hidden="true">☾</span>&nbsp;Dark mode</span>
+            <span class="theme-icon-dark"><span class="fab-item-icon" aria-hidden="true">☀</span>&nbsp;Light mode</span>
+          </button>
+        </div>
+      </div>
+      <button
+        id="fab-trigger"
+        class="fab-trigger"
+        type="button"
+        aria-label="Page actions"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-controls="fab-panel"
+      >
+        <span class="fab-trigger-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+
     <script>
-      const themeToggle = document.getElementById("theme-toggle");
-      themeToggle?.addEventListener("click", () => {
-        const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-        const next = current === "dark" ? "light" : "dark";
-        document.documentElement.dataset.theme = next;
-        try {
-          localStorage.setItem("theme", next);
-        } catch (e) {}
+      const fab = document.getElementById("fab");
+      const fabTrigger = document.getElementById("fab-trigger");
+      const fabItems = () =>
+        Array.from(fab?.querySelectorAll<HTMLElement>(".fab-item") ?? []).filter(
+          (item) => item.offsetParent !== null
+        );
+
+      const setFabOpen = (open: boolean) => {
+        if (!fab || !fabTrigger) return;
+        fab.classList.toggle("is-open", open);
+        fabTrigger.setAttribute("aria-expanded", String(open));
+        fab.querySelectorAll<HTMLElement>(".fab-item").forEach((item) => {
+          item.tabIndex = open ? 0 : -1;
+        });
+        if (open) fabItems()[0]?.focus({ preventScroll: true });
+      };
+
+      fabTrigger?.addEventListener("click", () => {
+        setFabOpen(!fab?.classList.contains("is-open"));
+      });
+      // Any action closes the menu.
+      fab?.addEventListener("click", (event) => {
+        const item = (event.target as HTMLElement).closest(".fab-item");
+        if (item) setFabOpen(false);
+      });
+      document.addEventListener("click", (event) => {
+        if (fab && !fab.contains(event.target as Node)) setFabOpen(false);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && fab?.classList.contains("is-open")) {
+          setFabOpen(false);
+          fabTrigger?.focus();
+        }
       });
 
+      document.querySelectorAll('[data-action="theme"]').forEach((button) =>
+        button.addEventListener("click", () => {
+          const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+          const next = current === "dark" ? "light" : "dark";
+          document.documentElement.dataset.theme = next;
+          try {
+            localStorage.setItem("theme", next);
+          } catch (e) {}
+        })
+      );
+
+      document.querySelectorAll('[data-action="top"]').forEach((button) =>
+        button.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        })
+      );
+
+      // Desktop: the back-to-top button shows after the first screen.
       const backToTop = document.getElementById("back-to-top");
-      const onScroll = () => {
-        if (!backToTop) return;
-        if (window.scrollY > 400) {
-          backToTop.classList.add("is-visible");
-        } else {
-          backToTop.classList.remove("is-visible");
-        }
-      };
+      const onScroll = () => backToTop?.classList.toggle("is-visible", window.scrollY > 400);
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
-      backToTop?.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
     </script>
 
     <!-- Privacy-friendly analytics by Plausible -->

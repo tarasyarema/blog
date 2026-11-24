@@ -1,0 +1,24 @@
+---
+// The agent-swarm callout. Posts tagged #agent-swarm get it automatically at the
+// end (see pages/blog/[slug].astro). Put <SwarmBanner /> in a post to place it
+// somewhere else; the automatic one is then skipped.
+import ProductBanner from "./ProductBanner.astro";
+import logo from "../img/brand/agent-swarm.png";
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<ProductBanner
+  name="agent-swarm"
+  logo={logo}
+  badge="Open source"
+  pitch="Build and “hire” a team of AI agents that learn and onboard in your company, while you keep full control of the processes, the AI and the data."
+  primary={{ label: "agent-swarm.dev", href: "https://agent-swarm.dev" }}
+  secondary={{ label: "GitHub", href: "https://github.com/desplega-ai/agent-swarm", icon: "github" }}
+  accent="204, 145, 53"
+  compact={compact}
+/>

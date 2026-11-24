@@ -1,0 +1,208 @@
+---
+// A product callout ("hive banner"): paper card with a faint honeycomb on the
+// right edge in the product's accent color, a logo, a short pitch and links.
+// Used by <SwarmBanner /> in posts and for the product cards on /about.
+import { Image } from "astro:assets";
+
+interface Link {
+  label: string;
+  href: string;
+  /** Brand mark shown before the label. */
+  icon?: "github";
+}
+
+interface Props {
+  name: string;
+  logo: ImageMetadata;
+  /** Short mono badge next to the name, e.g. "Open source". */
+  badge?: string;
+  /** One or two sentences. */
+  pitch: string;
+  primary: Link;
+  secondary?: Link;
+  /** Accent as "r, g, b" (used for the honeycomb and the hover state). */
+  accent: string;
+  compact?: boolean;
+}
+
+const { name, logo, badge, pitch, primary, secondary, accent, compact = false } = Astro.props;
+
+// One seamless tile of pointy-top hex outlines (rows offset by half a cell).
+const r = 11;
+const w = Math.sqrt(3) * r;
+const h = 3 * r;
+const hex = (cx: number, cy: number) =>
+  Array.from({ length: 6 }, (_, i) => {
+    const a = (Math.PI / 3) * i - Math.PI / 2;
+    return `${(cx + r * Math.cos(a)).toFixed(2)},${(cy + r * Math.sin(a)).toFixed(2)}`;
+  }).join(" ");
+const centers = [
+  [0, 0],
+  [w, 0],
+  [w / 2, 1.5 * r],
+  [0, 3 * r],
+  [w, 3 * r],
+];
+const tile =
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${w.toFixed(2)}" height="${h}" viewBox="0 0 ${w.toFixed(2)} ${h}">` +
+  centers.map(([x, y]) => `<polygon points="${hex(x, y)}" fill="none" stroke="rgb(${accent})" stroke-width="1"/>`).join("") +
+  `</svg>`;
+const hive = `url("data:image/svg+xml,${encodeURIComponent(tile)}")`;
+---
+
+<aside
+  class:list={["product-banner", { "product-banner--compact": compact }]}
+  style={`--pb-accent: ${accent}; --pb-hive: ${hive};`}
+  aria-label={name}
+  data-no-rich-links
+  data-no-zoom
+>
+  <div class="product-banner-head">
+    <Image src={logo} alt="" width={56} height={56} class="product-banner-logo" />
+    <span class="product-banner-name">{name}</span>
+    {badge && <span class="product-banner-badge">{badge}</span>}
+  </div>
+  <p class="product-banner-pitch">{pitch}</p>
+  <div class="product-banner-links">
+    <a class="product-banner-primary" href={primary.href} target="_blank" rel="noopener noreferrer">
+      {primary.label} <span aria-hidden="true">→</span>
+    </a>
+    {secondary && (
+      <a class="product-banner-secondary" href={secondary.href} target="_blank" rel="noopener noreferrer">
+        {secondary.icon === "github" && (
+          <svg class="product-banner-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        )}
+        {secondary.label} <span aria-hidden="true">↗</span>
+      </a>
+    )}
+  </div>
+</aside>
+
+<style>
+  .product-banner {
+    position: relative;
+    overflow: hidden;
+    margin: 2.5rem 0;
+    padding: 1.25rem 1.5rem 1.3rem;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid rgb(var(--pb-accent));
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  /* Faint honeycomb, strongest at the right edge and fading toward the text */
+  .product-banner::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 45%;
+    background-image: var(--pb-hive);
+    background-position: right center;
+    opacity: 0.45;
+    -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .product-banner > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .product-banner-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .product-banner :global(.product-banner-logo) {
+    width: 28px;
+    height: 28px;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: #fff;
+  }
+
+  .product-banner-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+
+  .product-banner-badge {
+    padding: 0.1rem 0.45rem;
+    border: 1px solid rgba(var(--pb-accent), 0.6);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .product-banner-pitch {
+    max-width: 34rem;
+    margin: 0 0 0.9rem;
+    color: var(--color-text);
+  }
+
+  .product-banner-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .product-banner-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .product-banner-primary {
+    border: 1px solid var(--color-text);
+    background-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .product-banner-primary:hover {
+    color: var(--color-bg);
+    background-color: rgb(var(--pb-accent));
+    border-color: rgb(var(--pb-accent));
+  }
+
+  .product-banner-secondary {
+    border: 1px solid var(--color-rule);
+    background-color: transparent;
+    color: var(--color-text);
+  }
+
+  .product-banner-icon {
+    width: 1em;
+    height: 1em;
+    flex: none;
+  }
+
+  .product-banner-secondary:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+  }
+
+  .product-banner--compact {
+    margin: 1rem 0;
+    padding: 1rem 1.15rem 1.05rem;
+  }
+
+  .product-banner--compact .product-banner-pitch {
+    font-size: 0.95rem;
+  }
+</style>

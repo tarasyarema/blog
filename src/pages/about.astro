@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import RichLinks from "../components/RichLinks.astro";
+import SwarmBanner from "../components/SwarmBanner.astro";
 ---
 
 <BaseLayout title="Who am I — taras" description="About Taras">
@@ -22,8 +23,12 @@ import RichLinks from "../components/RichLinks.astro";
       </p>
 
       <p style="margin-bottom: 1.25rem;">
-        I'm currently building <a href="https://desplega.sh">desplega labs</a> with an amazing co-founder, and we shipped some interesting products like <a href="https://desplega.ai">desplega.ai</a> and <a href="https://agent-swarm.dev">agent-swarm</a>.
+        I'm currently building <a href="https://desplega.sh">desplega labs</a> with an amazing co-founder, and we shipped some interesting products like <a href="https://agent-swarm.dev">agent-swarm</a>.
       </p>
+
+      <div class="about-products">
+        <SwarmBanner compact />
+      </div>
 
       <p style="margin-bottom: 1.25rem;">
         Before that I worked at <a href="http://solo.one/">SOLO</a> and <a href="https://capchase.com/">Capchase</a>, where I had the amazing opportunity of working with great people, which some I'm lucky to call friends now.
@@ -52,3 +57,16 @@ import RichLinks from "../components/RichLinks.astro";
   </main>
   <RichLinks />
 </BaseLayout>
+
+<style>
+  .about-products {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0 1.75rem;
+  }
+
+  .about-products > :global(.product-banner) {
+    margin: 0;
+  }
+</style>

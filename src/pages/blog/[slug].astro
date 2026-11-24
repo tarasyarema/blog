@@ -2,6 +2,7 @@
 import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
 import { getCollection, render } from "astro:content";
 import { readTimeLabel } from "../../utils/readTime";
+import SwarmBanner from "../../components/SwarmBanner.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -44,6 +45,10 @@ if (explicitSlugs.length > 0) {
     .map((x) => x.post);
 }
 
+// Posts tagged #agent-swarm end with the agent-swarm callout, unless the post places it itself.
+const showSwarmBanner =
+  post.data.tags.includes("agent-swarm") && !(post.body ?? "").includes("<SwarmBanner");
+
 const related = relatedPosts.map((p) => ({
   id: p.id,
   title: p.data.title,
@@ -64,4 +69,5 @@ const related = relatedPosts.map((p) => ({
   related={related}
 >
   <Content />
+  {showSwarmBanner && <SwarmBanner />}
 </BlogPostLayout>

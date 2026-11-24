@@ -11,23 +11,59 @@ interface Props {
 const { src, alt, caption, width = 700 } = Astro.props;
 // Never upscale: a small source keeps its natural size.
 const renderWidth = Math.min(width, src.width);
+
+// A caption that starts with "Figure 3." gets a mono "FIG. 3" label.
+const figureMatch = caption.match(/^Figure\s+(\d+)\.\s*/i);
+const figureLabel = figureMatch ? `Fig. ${figureMatch[1]}` : null;
+const captionText = figureMatch ? caption.slice(figureMatch[0].length) : caption;
 ---
 
-<figure>
-  <div style="border-top: 1px solid #d0d0d0; border-bottom: 1px solid #d0d0d0; padding: 1rem 0; display: flex; justify-content: center; margin: 0 auto;">
-    <div style="max-width: 100%; width: 100%; display: flex; justify-content: center;">
-      <Image {src} {alt} width={renderWidth} data-zoom-src={src.src} />
-    </div>
+<figure class="blog-figure">
+  <div class="blog-figure-frame">
+    <Image {src} {alt} width={renderWidth} data-zoom-src={src.src} />
   </div>
-  <figcaption style="margin-top: 0.75rem; font-size: 0.9rem; color: #666; text-align: center;">
-    {caption}
+  <figcaption>
+    {figureLabel && <span class="blog-figure-label">{figureLabel}</span>}
+    {captionText}
   </figcaption>
 </figure>
 
 <style>
-  figure :global(img) {
+  .blog-figure {
+    margin: 2rem 0;
+    padding: 1rem 1rem 0.9rem;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+  }
+
+  .blog-figure-frame {
+    display: flex;
+    justify-content: center;
+  }
+
+  .blog-figure :global(img) {
+    display: block;
     max-width: 100%;
     height: auto;
-    display: block;
+    margin: 0;
+    border-radius: 3px;
+  }
+
+  figcaption {
+    margin-top: 0.85rem;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--color-link);
+  }
+
+  .blog-figure-label {
+    margin-right: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text);
   }
 </style>

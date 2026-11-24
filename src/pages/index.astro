@@ -160,10 +160,18 @@ const posts = sortedPosts.map((post) => ({
       min-width: 0;
     }
 
+    /* A small framed print: hairline frame, paper mat, a second hairline around the image */
     .post-card-thumb {
       grid-column: 2;
       grid-row: 1;
       display: block;
+      padding: 7px;
+      background-color: var(--color-paper);
+      border: 1px solid var(--color-rule);
+      outline: 1px solid var(--color-border);
+      outline-offset: 3px;
+      border-radius: 1px;
+      transition: border-color 0.2s ease, outline-color 0.2s ease;
     }
 
     .post-card-thumb img {
@@ -174,12 +182,12 @@ const posts = sortedPosts.map((post) => ({
       object-fit: cover;
       margin: 0;
       border: 1px solid var(--color-border);
-      border-radius: 2px;
-      transition: opacity 0.2s ease;
+      border-radius: 0;
     }
 
-    .post-card-thumb:hover img {
-      opacity: 0.9;
+    .post-card-thumb:hover {
+      border-color: var(--color-text);
+      outline-color: var(--color-rule);
     }
 
     @media (max-width: 640px) {

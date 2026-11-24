@@ -12,10 +12,9 @@ const { src, alt, caption, width = 700 } = Astro.props;
 // Never upscale: a small source keeps its natural size.
 const renderWidth = Math.min(width, src.width);
 
-// A caption that starts with "Figure 3." gets a mono "FIG. 3" label.
-const figureMatch = caption.match(/^Figure\s+(\d+)\.\s*/i);
-const figureLabel = figureMatch ? `Fig. ${figureMatch[1]}` : null;
-const captionText = figureMatch ? caption.slice(figureMatch[0].length) : caption;
+// Figures are numbered automatically in page order (CSS counter), so a
+// leading "Figure 3." in the caption text is dropped to avoid saying it twice.
+const captionText = caption.replace(/^Figure\s+\d+\.\s*/i, "");
 ---
 
 <figure class="blog-figure">
@@ -23,13 +22,18 @@ const captionText = figureMatch ? caption.slice(figureMatch[0].length) : caption
     <Image {src} {alt} width={renderWidth} data-zoom-src={src.src} />
   </div>
   <figcaption>
-    {figureLabel && <span class="blog-figure-label">{figureLabel}</span>}
+    <span class="blog-figure-label" aria-hidden="true"></span>
     {captionText}
   </figcaption>
 </figure>
 
 <style>
+  :global(.post-content) {
+    counter-reset: figure;
+  }
+
   .blog-figure {
+    counter-increment: figure;
     margin: 2rem 0;
     padding: 1rem 1rem 0.9rem;
     background-color: var(--color-paper);
@@ -55,6 +59,10 @@ const captionText = figureMatch ? caption.slice(figureMatch[0].length) : caption
     font-size: 0.88rem;
     line-height: 1.55;
     color: var(--color-link);
+  }
+
+  .blog-figure-label::before {
+    content: "Fig. " counter(figure);
   }
 
   .blog-figure-label {

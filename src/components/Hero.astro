@@ -1,0 +1,44 @@
+---
+// Header image for a post, framed like the thumbnail in the post list:
+// hairline frame, paper mat, a second hairline around the image. Click to zoom.
+import { Image } from "astro:assets";
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+}
+
+const { src, alt } = Astro.props;
+---
+
+<div class="post-hero">
+  <Image {src} {alt} width={1200} data-zoom-src={src.src} loading="eager" />
+</div>
+
+<style>
+  .post-hero {
+    margin: 0 0 2.5rem;
+    padding: 10px;
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-rule);
+    outline: 1px solid var(--color-border);
+    outline-offset: 4px;
+    border-radius: 1px;
+  }
+
+  .post-hero :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+  }
+
+  @media (max-width: 640px) {
+    .post-hero {
+      padding: 6px;
+      outline-offset: 3px;
+    }
+  }
+</style>

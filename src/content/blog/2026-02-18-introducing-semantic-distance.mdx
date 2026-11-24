@@ -3,9 +3,11 @@ title: Introducing Semantic Distance
 subtitle: A metric to measure your agentic back pressure
 date: 2026-02-18
 tags: [testing, ai, coding-agents]
+image: /img/semantic-distance/thumb.jpg
 ---
 
 import BlogImage from '../../components/BlogImage.astro';
+import Statement from '../../components/Statement.astro';
 import whatAndWhen from '../../img/semantic-distance/what-and-when.png';
 import semanticDistance from '../../img/semantic-distance/semantic-distance.png';
 import shiftLeft from '../../img/semantic-distance/shift-left.png';
@@ -49,14 +51,14 @@ We will be using an example in which an agent generates a new `/users/:id/settin
 
 The first level is **Form**. It’s the most basic form, which should never be even thought of by a human. No code should be committed without passing these primal checks.
 
-> E.g. The linter flags an unused import the agent left behind. The type checker catches a string passed where the schema expects boolean. Cost: milliseconds, zero human involvement. Another example is [using codemods](https://martinfowler.com/articles/codemods-api-refactoring.html) to upgrade client code on API changes.
+<Statement kind="Example" n={1}>The linter flags an unused import the agent left behind. The type checker catches a string passed where the schema expects boolean. Cost: milliseconds, zero human involvement. Another example is [using codemods](https://martinfowler.com/articles/codemods-api-refactoring.html) to upgrade client code on API changes.</Statement>
 
 **Meaning**  
 *Agents proof of work*
 
 The second one is **Meaning**. This is where the basic building blocks of your code are verified. I like to think of these as the proof of work for the agents. Any new code added should have its basic unit tests. Each external dependency should consider its applicable learning tests that make you feel safe when upgrading. Each service communication layer should have a way to ensure compatibility. This is the core trust layer, and it should be append-only. You should only remove a meaning check if you remove its associated code. Pushing should be blocked if not passing, and a new delta should be required on additions.
 
-> E.g. A learning test reveals that the ORM's `.update()` method doesn't do a partial merge, rather it replaces the entire record. The agent assumed patch semantics but the library has put semantics. A unit test catches that the validation logic rejects valid timezone strings. Cost: seconds, still no human.
+<Statement kind="Example" n={2}>A learning test reveals that the ORM's `.update()` method doesn't do a partial merge, rather it replaces the entire record. The agent assumed patch semantics but the library has put semantics. A unit test catches that the validation logic rejects valid timezone strings. Cost: seconds, still no human.</Statement>
 
 **Behavior**  
 *An agent should have all the necessary tools to be able to run behavior tests, and these should be part of your plans.*
@@ -67,7 +69,7 @@ The agent should have all the necessary tools to run behavior tests autonomously
 
 In the behavior level you should aim to have specific checks in each non-trivial plan, and during review you (the human) should have easy ways to see and validate what behaviors were checked. 
 
-> E.g. An integration test hits the running service and discovers the endpoint returns 200 on success instead of the 204 the OpenAPI spec defines. A contract test catches that the response shape doesn't match what the frontend client expects. Cost: seconds to minutes, still no human.
+<Statement kind="Example" n={3}>An integration test hits the running service and discovers the endpoint returns 200 on success instead of the 204 the OpenAPI spec defines. A contract test catches that the response shape doesn't match what the frontend client expects. Cost: seconds to minutes, still no human.</Statement>
 
 **Intent**  
 *Does this change make sense or not? Does the change solve the problem it needs to solve?*
@@ -80,7 +82,7 @@ These might vary a lot from business to business. If you do not have a UI, your 
 
 In some cases, the infrastructure required to do so is hard and expensive (e.g. ephemeral environments, production database forks, etc.) but if you do not solve that, you will never be able to know if the change is right. No, not even if Opus 13.7 ships. Think about it, how do you know that the Principal that just joined your startup actually understands what it means to do X or Y on the platform? It does not matter if it’s the best in the world, if the intent is not clear and tested, I’m afraid you are playing roulette.
 
-> E.g. An e2e test simulates a user changing their notification preferences and confirms the change persists across sessions. A visual regression test confirms the settings page renders correctly. Cost: minutes, and this is where the human reviews what was checked. The agent self-corrected three times before a human ever looked at the PR. That's the point.
+<Statement kind="Example" n={4}>An e2e test simulates a user changing their notification preferences and confirms the change persists across sessions. A visual regression test confirms the settings page renders correctly. Cost: minutes, and this is where the human reviews what was checked. The agent self-corrected three times before a human ever looked at the PR. That's the point.</Statement>
 
 ## So, how do you actually use this?
 

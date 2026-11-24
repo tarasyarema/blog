@@ -1,0 +1,380 @@
+{
+  "http://AGENTS.md": {
+    "title": "AGENTS.md",
+    "description": "AGENTS.md is a simple, open format for guiding coding agents. Think of it as a README for agents.",
+    "image": "https://agents.md/og.png",
+    "siteName": null
+  },
+  "http://solo.one/": {
+    "title": "SOLO | The Bank Reliance Network | SOLO | The Bank Reliance Network",
+    "description": "SOLO is a shared customer record, built and maintained by a bank reliance network so no one starts from zero.",
+    "image": "https://cdn.sanity.io/images/vu630r9p/production/2764b3cdbed7578b409d5eb6da1618b160ab2c1b-2430x1276.jpg?rect=0,3,2430,1270&w=1200&h=627&fit=crop&auto=format",
+    "siteName": null
+  },
+  "https://adventofcorona.hackersatupc.org/#/problem/6": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://adventofcorona.hackersatupc.org/#/problem/8": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://agent-swarm.dev": {
+    "title": "Agent Swarm: the open-source company OS",
+    "description": "Agent Swarm is the open-source company OS: a lead agent runs a team of AI agents on your infrastructure, with shared memory and skills.",
+    "image": "https://www.agent-swarm.dev/api/og?title=Agent+Swarm%3A+the+open-source+company+OS&subtitle=Your+company%E2%80%99s+AI+team.+One+lead+agent%2C+many+workers%2C+one+shared+memory.&style=amber",
+    "siteName": "Agent Swarm"
+  },
+  "https://agent-swarm.dev/": {
+    "title": "Agent Swarm: the open-source company OS",
+    "description": "Agent Swarm is the open-source company OS: a lead agent runs a team of AI agents on your infrastructure, with shared memory and skills.",
+    "image": "https://www.agent-swarm.dev/api/og?title=Agent+Swarm%3A+the+open-source+company+OS&subtitle=Your+company%E2%80%99s+AI+team.+One+lead+agent%2C+many+workers%2C+one+shared+memory.&style=amber",
+    "siteName": "Agent Swarm"
+  },
+  "https://arxiv.org/abs/2407.01437": {
+    "title": "Needle in the Haystack for Memory Based Large Language Models",
+    "description": "Current large language models (LLMs) often perform poorly on simple fact retrieval tasks. Here we investigate if coupling a dynamically adaptable external memory to a LLM can alleviate this problem. For this purpose, we test Larimar, a recently proposed language model architecture which uses an exte",
+    "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+    "siteName": "arXiv.org"
+  },
+  "https://banay.me/dont-waste-your-backpressure/": {
+    "title": "Don't waste your back pressure &middot;",
+    "description": "Back pressure for agents You might notice a pattern in the most successful applications of agents over the last year. Projects that are able to setup structure around the agent itself, to provide it with automated feedback on quality and correctness, have been able to push them to work on longer hor",
+    "image": null,
+    "siteName": null
+  },
+  "https://blog.langchain.com/multi-needle-in-a-haystack/": {
+    "title": "Multi Needle in a Haystack",
+    "description": "Multi-Needle benchmark reveals how LLM retrieval degrades with multiple facts and reasoning tasks. GPT-4 and RAG results explored.",
+    "image": "https://cdn.prod.website-files.com/65c81e88c254bb0f97633a71/69cbb00af4d459ecdf5fca6d_multi-needle-figure-2-1.png",
+    "siteName": null
+  },
+  "https://capchase.com": {
+    "title": "Modern Vendor Financing for B2B Software and Hardware Purchases | Capchase",
+    "description": "Access booked revenue on annual and multi-year deals immediately and close more deals with flexible payment terms. Easy-to-use, integrated vendor financing platform that enables faster decision-making through real-time data and response and automated workflows, available across nine countries.",
+    "image": "https://cdn.prod.website-files.com/6146543ab50f167ae088b201/6ac8ebdbf25df2ebeeb762fb_Frame%201171278574.png",
+    "siteName": null
+  },
+  "https://capchase.com/": {
+    "title": "Modern Vendor Financing for B2B Software and Hardware Purchases | Capchase",
+    "description": "Access booked revenue on annual and multi-year deals immediately and close more deals with flexible payment terms. Easy-to-use, integrated vendor financing platform that enables faster decision-making through real-time data and response and automated workflows, available across nine countries.",
+    "image": "https://cdn.prod.website-files.com/6146543ab50f167ae088b201/6ac8ebdbf25df2ebeeb762fb_Frame%201171278574.png",
+    "siteName": null
+  },
+  "https://cloud.google.com/blog/products/ai-machine-learning/the-needle-in-the-haystack-test-and-how-gemini-pro-solves-it": {
+    "title": "The Needle in the Haystack Test and How Gemini Pro Solves It | Google Cloud Blog",
+    "description": "Learn how Google Gemini 1.5 Pro achieves near-perfect recall in the needle-in-haystack test: finding keywords in vast text, video, and audio data.",
+    "image": "https://storage.googleapis.com/gweb-cloudblog-publish/images/needle-haystack.max-2600x2600.png",
+    "siteName": "Google Cloud Blog"
+  },
+  "https://codecut.ai/langchain-1-0-middleware-production-agents/": {
+    "title": "Build Production-Ready LLM Agents with LangChain 1.0 Middleware",
+    "description": "Learn to build production-ready LLM agents using LangChain 1.0 middleware for PII detection, human approval workflows, and intelligent tool selection.",
+    "image": "https://codecut.ai/wp-content/uploads/2025/10/Langchain-Middleware.png",
+    "siteName": "CodeCut"
+  },
+  "https://desplega.sh": {
+    "title": "desplega labs — Made by builders, for builders",
+    "description": "desplega labs — the studio behind desplega.ai, agent-swarm, qa-use, and agent-fs. Made by builders, for builders. Tools, essays, and open-source experiments at the edge of AI-driven engineering.",
+    "image": "https://www.desplega.sh/icon-512x512.png",
+    "siteName": "desplega labs"
+  },
+  "https://docs.astral.sh/uv/": {
+    "title": "uv",
+    "description": "uv is an extremely fast Python package and project manager, written in Rust.",
+    "image": null,
+    "siteName": null
+  },
+  "https://docs.astral.sh/uv/concepts/projects/dependencies/#git": {
+    "title": "Managing dependencies | uv",
+    "description": "uv is an extremely fast Python package and project manager, written in Rust.",
+    "image": null,
+    "siteName": null
+  },
+  "https://en.wikipedia.org/wiki/Brooks's_law": {
+    "title": "Brooks's law - Wikipedia",
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://en.wikipedia.org/wiki/Fordism": {
+    "title": "Fordism - Wikipedia",
+    "description": null,
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Henry_Ford%2C_head-and-shoulders_portrait%2C_facing_slightly_left%29_-_Hartsook_photo_LCCN94506959_Trim.jpg/960px-Henry_Ford%2C_head-and-shoulders_portrait%2C_facing_slightly_left%29_-_Hartsook_photo_LCCN94506959_Trim.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail",
+    "siteName": null
+  },
+  "https://en.wikipedia.org/wiki/Industrialisation": {
+    "title": "Industrialisation - Wikipedia",
+    "description": null,
+    "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Maddison_GDP_per_capita_1500-1950.svg/1280px-Maddison_GDP_per_capita_1500-1950.svg.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail",
+    "siteName": null
+  },
+  "https://en.wikipedia.org/wiki/The_Toyota_Way": {
+    "title": "The Toyota Way - Wikipedia",
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://ghuntley.com/pressure/": {
+    "title": "don’t waste your back pressure",
+    "description": "I am fortunate to be surrounded by folks who listen and the link below post will go down as a seminal reading for people interested in AI context engineering. A simple convo between mates - well Moss translated it into words and i’ve been waiting for it to come out",
+    "image": "https://storage.ghost.io/c/06/e5/06e5d12b-0328-469d-a0d0-3a0f0ba34c46/content/images/2026/01/Bright-lens-flare-with-warm-terracotta-and-cool-teal-tones--a-symbolic-traditional-tattoo-art-print-of-a-stalled-wheel-and-AI-robot--in-vibrant-colors--retro-flair--complex-ornamental-style-on-a-white-background--showcasi.jpg",
+    "siteName": "Geoffrey Huntley"
+  },
+  "https://ghuntley.com/ralph/": {
+    "title": "Ralph Wiggum as a \"software engineer\"",
+    "description": "How Ralph Wiggum went from 'The Simpsons' to the biggest name in AI right now - Venture Beat 😎Here's a cool little field report from a Y Combinator hackathon event where they put Ralph Wiggum to the test. \"We Put a Coding Agent in a While Loop and It Shipped",
+    "image": "https://storage.ghost.io/c/06/e5/06e5d12b-0328-469d-a0d0-3a0f0ba34c46/content/images/size/w1200/2025/06/3ea367ed-cae3-454a-840f-134531dea1fd.jpg",
+    "siteName": "Geoffrey Huntley"
+  },
+  "https://github.com/BoundaryML/baml": {
+    "title": "GitHub - BoundaryML/baml: The programming language for agents",
+    "description": "The programming language for agents. Contribute to BoundaryML/baml development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/1f13b92e40d78e1682ccf1149e22691e315c49fd82862d75428cfe16ec9dcbaa/BoundaryML/baml",
+    "siteName": "GitHub"
+  },
+  "https://github.com/browser-use/browser-use": {
+    "title": "GitHub - browser-use/browser-use: Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API.",
+    "description": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API. - browser-use/browser-use",
+    "image": "https://repository-images.githubusercontent.com/881458615/fddb1de9-5742-4037-8ea9-bf8f1cfd2f58",
+    "siteName": "GitHub"
+  },
+  "https://github.com/browser-use/browser-use/issues?q=is%3Aissue%20author%3Atarasyarema": {
+    "title": "Issues · browser-use/browser-use",
+    "description": "Open-source Python library for AI browser agents, plus Browser Use Cloud: stealth browsers and a hosted agent API. - Issues · browser-use/browser-use",
+    "image": "https://repository-images.githubusercontent.com/881458615/fddb1de9-5742-4037-8ea9-bf8f1cfd2f58",
+    "siteName": "GitHub"
+  },
+  "https://github.com/browser-use/browser-use/pull/1772": {
+    "title": "fix: Binding already registered issue on follow-up task by tarasyarema · Pull Request #1772 · browser-use/browser-use",
+    "description": "Fixes #1771",
+    "image": "https://opengraph.githubassets.com/e9b2ae54a990e2ba694b82860095f70c7ae993e431e57ab36586d2e47aea11c0/browser-use/browser-use/pull/1772",
+    "siteName": "GitHub"
+  },
+  "https://github.com/Capchase/stripe-go": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://github.com/desplega-ai/context-engineering": {
+    "title": "GitHub - desplega-ai/context-engineering",
+    "description": "Contribute to desplega-ai/context-engineering development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/82dee1fcf64cad2a63e77e2ee0a42f074518cf773ba3aecaffea6285859a0a20/desplega-ai/context-engineering",
+    "siteName": "GitHub"
+  },
+  "https://github.com/desplega-ai/context-engineering/blob/main/analysis_output/summary_report.md": {
+    "title": "context-engineering/analysis_output/summary_report.md at main · desplega-ai/context-engineering",
+    "description": "Contribute to desplega-ai/context-engineering development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/82dee1fcf64cad2a63e77e2ee0a42f074518cf773ba3aecaffea6285859a0a20/desplega-ai/context-engineering",
+    "siteName": "GitHub"
+  },
+  "https://github.com/desplega-ai/context-engineering/blob/main/src/agents/intent_prompts.py": {
+    "title": "context-engineering/src/agents/intent_prompts.py at main · desplega-ai/context-engineering",
+    "description": "Contribute to desplega-ai/context-engineering development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/82dee1fcf64cad2a63e77e2ee0a42f074518cf773ba3aecaffea6285859a0a20/desplega-ai/context-engineering",
+    "siteName": "GitHub"
+  },
+  "https://github.com/humanlayer/12-factor-agents": {
+    "title": "GitHub - humanlayer/12-factor-agents: What are the principles we can use to build LLM-powered software that is actually good enough to put in the hands of production customers?",
+    "description": "What are the principles we can use to build LLM-powered software that is actually good enough to put in the hands of production customers? - humanlayer/12-factor-agents",
+    "image": "https://opengraph.githubassets.com/b01c842d18ca11751b40573c6b46aaa6d47f3d66d38ea0e42a48521fd25df46e/humanlayer/12-factor-agents",
+    "siteName": "GitHub"
+  },
+  "https://github.com/humanlayer/advanced-context-engineering-for-coding-agents": {
+    "title": "GitHub - humanlayer/advanced-context-engineering-for-coding-agents",
+    "description": "Contribute to humanlayer/advanced-context-engineering-for-coding-agents development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/7ed268f20976423061c0cce247f5b19bb74f8ba174b24574b28b8ce3b799b8ba/humanlayer/advanced-context-engineering-for-coding-agents",
+    "siteName": "GitHub"
+  },
+  "https://github.com/stripe/stripe-go": {
+    "title": "GitHub - stripe/stripe-go: Go library for the Stripe API.",
+    "description": "Go library for the Stripe API. . Contribute to stripe/stripe-go development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/89ecd7535504bfe86146dcdfe0bc60886d008a8b248fb34d15a3f3a24e0a3a86/stripe/stripe-go",
+    "siteName": "GitHub"
+  },
+  "https://github.com/stripe/stripe-go/issues/1255": {
+    "title": "JSON structs omitempty · Issue #1255 · stripe/stripe-go",
+    "description": "We're integrating Stripe with a SQL-like database and we need to only store those fields that are actually populated when fetching from the API using this library. The problem is that, as we are us...",
+    "image": "https://opengraph.githubassets.com/eca5ca10dd106b1d34ddf2a894606f9980ac7283349a952d51b05c37031270b6/stripe/stripe-go/issues/1255",
+    "siteName": "GitHub"
+  },
+  "https://github.com/tarasyarema": {
+    "title": "tarasyarema - Overview",
+    "description": "building @desplega-ai w @harlequinetcie @desplega-bot is our baby - tarasyarema",
+    "image": "https://avatars.githubusercontent.com/u/9470158?v=4?s=400",
+    "siteName": "GitHub"
+  },
+  "https://github.com/tarasyarema/browser-use": {
+    "title": "GitHub - tarasyarema/browser-use: Make websites accessible for AI agents",
+    "description": "Make websites accessible for AI agents. Contribute to tarasyarema/browser-use development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/b640ccc30921c82910181e6e8ef3ab93c7150921d72cf31eb41c47e86dd4746b/tarasyarema/browser-use",
+    "siteName": "GitHub"
+  },
+  "https://github.com/tarasyarema/sockit": {
+    "title": "GitHub - tarasyarema/sockit: epic tcp problem",
+    "description": "epic tcp problem. Contribute to tarasyarema/sockit development by creating an account on GitHub.",
+    "image": "https://opengraph.githubassets.com/24307a8c959632bb7c804b27cd57e3d722f4c226c479783131b41558fe1ffab2/tarasyarema/sockit",
+    "siteName": "GitHub"
+  },
+  "https://golang.org/ref/spec#The_zero_value": {
+    "title": "The Go Programming Language Specification - The Go Programming Language",
+    "description": null,
+    "image": "https://go.dev/doc/gopher/gopher5logo.jpg",
+    "siteName": null
+  },
+  "https://graphite.io/five-percent/ai-now-writes-as-many-online-articles-as-humans-do": {
+    "title": "AI Now Writes as Many Online Articles as Humans",
+    "description": "We build on our prior research by using three AI detectors (Pangram, GPTZero, Copyleaks). The proportion of primarily AI-generated articles has plateaued near…",
+    "image": "https://graphite.io/research/ai-now-writes-as-many-online-articles-as-humans-do/opengraph-image?4d361278e511a2d5",
+    "siteName": "Graphite"
+  },
+  "https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus": {
+    "title": "Context Engineering for AI Agents: Lessons from Building Manus",
+    "description": "This post shares the local optima Manus arrived at through our own \"SGD\". If you're building your own AI agent, we hope these principles help you converge faster.",
+    "image": "https://files.manuscdn.com/assets/dashboard/materials/2025/07/18/eaafe9e6a174b29458c314ccc225dbdd39a7c9d66e60786235165d9aba23f578.webp",
+    "siteName": null
+  },
+  "https://martinfowler.com/articles/codemods-api-refactoring.html": {
+    "title": "Refactoring with Codemods to Automate API Changes",
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://openai.com/index/perplexity-and-intelligence/": {
+    "title": "Perplexity and Intelligence",
+    "description": "How perplexity measures progress in AI models, and why it could help developers establish a shared approach to evaluating emerging capabilities.",
+    "image": "https://images.ctfassets.net/kftzwdyauwt9/6rIIhCRSKrhIfe385Onmcz/aca2d190553c62fd5d49efb5d5ce1eb6/perplexity-and-intelligence-social.png?w=1600&h=900&fit=fill",
+    "siteName": "OpenAI"
+  },
+  "https://paulgraham.com/avg.html": {
+    "title": "Beating the Averages",
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://pkg.go.dev/github.com/stripe/stripe-go/v72#Coupon": {
+    "title": "stripe package - github.com/stripe/stripe-go/v72 - Go Packages",
+    "description": "Package stripe provides the binding for Stripe REST APIs.",
+    "image": null,
+    "siteName": null
+  },
+  "https://play.golang.org/p/BDOUlE6RHLH": {
+    "title": "Go Playground - The Go Programming Language",
+    "description": null,
+    "image": "https://go.dev/doc/gopher/gopher5logo.jpg",
+    "siteName": null
+  },
+  "https://playwright.dev/python/": {
+    "title": "Fast and reliable end-to-end testing for modern web apps | Playwright Python",
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://polsia.com": {
+    "title": "Polsia — AI That Runs Your Company",
+    "description": "Autonomous AI that plans, codes, and markets your company daily while you sleep.",
+    "image": "https://polsia.com/og/home.png",
+    "siteName": "Polsia"
+  },
+  "https://stripe.com/docs/api": {
+    "title": "Stripe API Reference",
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://twitter.com/voidisomorphism": {
+    "title": "taras (@voidisomorphism) on X",
+    "description": "🇺🇦 building https://t.co/nPquazKNnI in the open, some thoughts in https://t.co/GkfLwMKgyg my baby is @agent__swarm",
+    "image": "https://pbs.twimg.com/profile_images/2100266320193261569/nbtvbfCH_400x400.jpg",
+    "siteName": "X (formerly Twitter)"
+  },
+  "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents": {
+    "title": "Effective context engineering for AI agents",
+    "description": "In this post, we explore strategies for effectively curating and managing their context.",
+    "image": "https://assets.claude.com/f30ee982765baffdf3c90058e6e9bafe9f1e5542.jpg",
+    "siteName": null
+  },
+  "https://www.linkedin.com/in/tarasyarema/": {
+    "title": "Taras Yarema - desplega labs | LinkedIn",
+    "description": "Studied maths and love to hack things. · Experiencia: desplega labs · Educación: Universitat de Barcelona · Ubicación: España · Más de 500 contactos en LinkedIn. Ver el perfil de Taras Yarema en LinkedIn, una red profesional de más de 1.000 millones de miembros.",
+    "image": "https://media.licdn.com/dms/image/v2/D4E03AQEddNuSLKcvVw/profile-displayphoto-scale_200_200/B4EZssfcZEKkAc-/0/1765977999564?e=2147483647&v=beta&t=r3jFuS31OjNggUdDc8HUWWWNzoowjmriu3NnTn_vdBY",
+    "siteName": null
+  },
+  "https://www.notion.so/Capchase-Open-Roles-e7ce7acd6a464ee293e38120bac0b526": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://www.pleasedontdeploy.com/p/validation-not-verification-3-strategies": {
+    "title": "Validation, not verification: 3 strategies for testing AI-generated code",
+    "description": "Validation / Validazione / Validación",
+    "image": "https://substackcdn.com/image/fetch/$s_!rXER!,w_1200,h_675,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc874a155-b50b-4015-b3e6-468bdb5e1afa_2048x1312.png",
+    "siteName": null
+  },
+  "https://www.youtube.com/watch?v=8kMaTybvDUw": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://www.youtube.com/watch?v=OpsGJaijG10": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://www.youtube.com/watch?v=xDeQVaoTvJM": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://www.youtube.com/watch?v=Zx_GOhGik0o": {
+    "title": null,
+    "description": null,
+    "image": null,
+    "siteName": null
+  },
+  "https://x.com/Bencera/status/2057847644966547920": {
+    "title": "Ben Cera (@Bencera) on X",
+    "description": "Polsia just raised $30M at a $250M valuation. Approaching $10M annual run rate. One Founder + AI. Zero employees. Polsia runs companies autonomously. It also ran its own fundraising. I just showed up for signatures.",
+    "image": "https://pbs.twimg.com/amplify_video_thumb/2057847593024294912/img/7EFSaTS2IM2VI2OC?format=webp&name=large",
+    "siteName": "X (formerly Twitter)"
+  },
+  "https://x.com/brookejlacey/status/2059362649889178090": {
+    "title": "Brooke Lacey (@brookejlacey) on X",
+    "description": "The Polsia public dashboard sits at https://t.co/WIuvkoV4ez and Claude and I spent 15 minutes reading the JSON so you don't have to. What follows is what's actually on it, in plain language, with the meaning of each number stated alongside the number itself. The headline figure is 5,010 \"compani…",
+    "image": "https://pbs.twimg.com/card_img/2124256535157022722/wOMcx9Fn?format=webp&name=medium",
+    "siteName": "X (formerly Twitter)"
+  },
+  "https://x.com/ecura": {
+    "title": "Ez.- (@ecura) on X",
+    "description": "You want to check https://t.co/70MDGv7BMy",
+    "image": "https://pbs.twimg.com/profile_images/2100315984665976833/Q8yH5gH3_400x400.jpg",
+    "siteName": "X (formerly Twitter)"
+  },
+  "https://x.com/merettm": {
+    "title": "Jakub Pachocki (@merettm) on X",
+    "description": "OpenAI",
+    "image": "https://pbs.twimg.com/profile_images/1032407242727809025/AJpM67Ve_400x400.jpg",
+    "siteName": "X (formerly Twitter)"
+  },
+  "https://x.com/voidisomorphism": {
+    "title": "taras (@voidisomorphism) on X",
+    "description": "🇺🇦 building https://t.co/nPquazKNnI in the open, some thoughts in https://t.co/GkfLwMKgyg my baby is @agent__swarm",
+    "image": "https://pbs.twimg.com/profile_images/2100266320193261569/nbtvbfCH_400x400.jpg",
+    "siteName": "X (formerly Twitter)"
+  },
+  "https://zero-arr.vercel.app": {
+    "title": "$30M for AISLOP — the \"autonomous AI company\" that",
+    "description": "Polsia (spelled backwards: AISLOP) raised $30M on a fully-autonomous-AI pitch. Their own public API + source map say otherwise. Every number is a public GET — don",
+    "image": "https://zero-arr.vercel.app/assets/og-card.png",
+    "siteName": null
+  }
+}

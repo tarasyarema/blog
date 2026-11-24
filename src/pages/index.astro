@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { readTimeLabel } from "../utils/readTime";
+import PostCard from "../components/PostCard.astro";
 
 const allPosts = await getCollection("blog");
 const sortedPosts = allPosts.sort((a, b) =>
@@ -57,51 +58,7 @@ const posts = sortedPosts.map((post) => ({
     <div id="posts-container">
       {
         posts.map((post) => (
-          <article class:list={["post-card", { "has-thumb": post.data.image }]}>
-            {post.data.image && (
-              <a href={post.url} class="post-card-thumb" tabindex="-1" aria-hidden="true">
-                <img src={post.data.image} alt="" loading="lazy" decoding="async" width="1200" height="628" />
-              </a>
-            )}
-            <div class="post-card-body">
-            <a href={post.url} style="text-decoration: none; color: inherit;">
-              <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
-                {post.data.title}
-              </h2>
-            </a>
-            <p style="font-size: 1.1rem; color: var(--color-link); margin-bottom: 0.75rem;">
-              {post.data.subtitle}
-            </p>
-            <p style="color: var(--color-link); font-size: 0.9rem; margin-bottom: 0.75rem;">
-              {new Date(post.data.date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-              {" · "}
-              {post.readTimeLabel}
-            </p>
-            {post.data.tags.length > 0 && (
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                {post.data.tags.map((tag) => (
-                  <a
-                    href={`/tags/${tag}`}
-                    style="
-                      display: inline-block;
-                      padding: 0.25rem 0.5rem;
-                      border: 1px solid var(--color-text);
-                      border-radius: 2px;
-                      font-size: 0.8rem;
-                      color: var(--color-text);
-                    "
-                  >
-                    #{tag}
-                  </a>
-                ))}
-              </div>
-            )}
-            </div>
-          </article>
+          <PostCard post={post} url={post.url} readTimeLabel={post.readTimeLabel} />
         ))
       }
     </div>
@@ -142,66 +99,6 @@ const posts = sortedPosts.map((post) => ({
     }
   </style>
 
-  <style is:global>
-    .post-card {
-      margin-bottom: 2.5rem;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    .post-card.has-thumb {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 240px;
-      gap: 2rem;
-      align-items: center;
-    }
-
-    .post-card-body {
-      min-width: 0;
-    }
-
-    /* A small framed print: hairline frame, paper mat, a second hairline around the image */
-    .post-card-thumb {
-      grid-column: 2;
-      grid-row: 1;
-      display: block;
-      padding: 7px;
-      background-color: var(--color-paper);
-      border: 1px solid var(--color-rule);
-      outline: 1px solid var(--color-border);
-      outline-offset: 3px;
-      border-radius: 1px;
-      transition: border-color 0.2s ease, outline-color 0.2s ease;
-    }
-
-    .post-card-thumb img {
-      display: block;
-      width: 100%;
-      height: auto;
-      aspect-ratio: 1200 / 628;
-      object-fit: cover;
-      margin: 0;
-      border: 1px solid var(--color-border);
-      border-radius: 0;
-    }
-
-    .post-card-thumb:hover {
-      border-color: var(--color-text);
-      outline-color: var(--color-rule);
-    }
-
-    @media (max-width: 640px) {
-      .post-card.has-thumb {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 1.25rem;
-      }
-
-      .post-card-thumb {
-        grid-column: 1;
-        grid-row: 1;
-      }
-    }
-  </style>
 
   <script type="module" define:vars={{ posts }}>
     (async () => {

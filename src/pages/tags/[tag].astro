@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { readTimeLabel } from "../../utils/readTime";
+import PostCard from "../../components/PostCard.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -49,25 +50,7 @@ const sortedPosts = taggedPosts.sort(
       sortedPosts.length > 0 ? (
         <div>
           {sortedPosts.map((post) => (
-            <article style="margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--color-border);">
-              <a href={`/blog/${post.id}`} style="text-decoration: none; color: inherit;">
-                <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer;">
-                  {post.data.title}
-                </h2>
-              </a>
-              <p style="font-size: 1.1rem; color: var(--color-link); margin-bottom: 0.75rem;">
-                {post.data.subtitle}
-              </p>
-              <p style="color: var(--color-link); font-size: 0.9rem;">
-                {new Date(post.data.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-                {" · "}
-                {readTimeLabel(post.body)}
-              </p>
-            </article>
+            <PostCard post={post} url={`/blog/${post.id}`} readTimeLabel={readTimeLabel(post.body)} />
           ))}
         </div>
       ) : (
